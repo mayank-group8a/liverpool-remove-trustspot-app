@@ -227,7 +227,7 @@
               <span class="ProductItem__Price Price Text--subdued" aria-label="Regular price" data-money-convertible>{{ product.price | money_without_trailing_zeros }}</span>
             {%- endif -%}
           </div>
-        <div class="trustspot-inline-category" data-product-sku="{{ product.id }}"></div>
+        <div data-product-sku="{{ product.id }}"></div>
         {%- endif -%}
 
         {%- if show_price_on_hover == false and color_swatch_list != blank -%}
