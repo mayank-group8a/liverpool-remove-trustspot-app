@@ -1,0 +1,25 @@
+<!-- /snippets/newsletter-subscribe.liquid -->
+  {% form 'customer' %}
+    {{ form.errors | default_errors }}
+
+    {% if form.posted_successfully? %}
+      <p class="Form__Alert Alert Alert--success" id="newslettererrors">{{ 'footer.newsletter.success' | t }}</p>
+	
+      <script>
+          if (history.pushState) {
+          var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?discount=LOVELP20';
+          window.history.pushState({path:newurl},'',newurl);
+      }
+      </script>
+    {% else %}
+      <input type="hidden" name="contact[tags]" value="prospect, email subscribe">
+      <div class="input-row">
+        <div class="input-wrapper">
+          <input type="email" name="contact[email]" id="email" placeholder="email@example.com" class="Form__Input" aria-describedby="newslettererrors" required>
+        </div>
+        <div class="button-wrapper">
+          <button type="submit" id="subscribe" class="Form__Submit Button Button--primary"><span class="icon icon-arrow-right" aria-hidden="true"></span></button>
+        </div>
+      </div>
+    {% endif %}
+  {% endform %}

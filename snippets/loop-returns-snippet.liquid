@@ -1,0 +1,572 @@
+<div id="LRS">
+	<div id="LRS-wrapper">
+		<div id="LRS-credit">
+			<p id="LRS-amount"></p>
+		</div>
+		<div id="LRS-copy">
+			<p>in available credit</p>
+		</div>
+		<a id="LRS-link" onClick="Loop.goBack()">Go Back</a>
+	</div>
+</div>
+
+<style>
+	html{
+		font-size: 1rem;
+	}
+	.loop-returns-activated #LRS{
+		transform: translateY(0);
+		display: block;
+	}
+	#loopATC{
+		display: none;
+	}
+    #LRS p{
+      margin: 0;
+    }
+    #LRS div{
+      margin: 0;
+    }
+    #LRS a:hover{
+      background-color: white;
+      color: red;
+      border: 1px solid white;
+      cursor: pointer;
+    }
+    #LRS{
+      width: 100%;
+      position: fixed;
+      display: none;
+      top: auto !important;
+      bottom: 0 !important;
+      left: 0;
+      z-index: 2147483647;
+      background-color: #2f7fd0;
+      transform: translateY(100%);
+      transition: transform 0.2s;
+      font-size: 1rem;
+    }
+    #LRS.render{
+      transform: translateY(-2rem);
+    }
+    #LRS-wrapper{
+      width: 100%;
+      padding: 0rem 1rem;
+      display: flex;
+      -ms-align-items: center;
+      align-items: center;
+    }
+    #LRS-amount{
+      color: white;
+      margin-right: 0.5rem !important;
+      font-size: 1.5rem;
+      padding-left: 1rem;
+      font-weight: 800;
+    }
+    #LRS-copy p{
+      color: white;
+      font-size: 1rem;
+    }
+    #LRS-link{
+      color: white;
+      display: block;
+      padding: 0.5rem 1rem;
+      margin: 1rem 0.5rem 1rem auto;
+      border: 1px solid white;
+      transition:  all 0.2s;
+    }
+	#LRS-link:hover{
+      	color: black;
+      	background-color: white;
+    }
+    #LRS-credit{
+    	float: left;
+    }
+
+
+    #LRS__investigation-block{
+		position: fixed;
+		right: 1rem;
+		z-index: 819237;
+		top: 1rem;
+		width: 500px;
+		background-color: #D8D8D8;
+		max-height: 320px;
+		overflow: hidden;
+		border-radius: 4px;
+    }
+
+    #LRS__investigation-block p{
+		font-size: 1rem;
+		color: #2C2C2C;
+		margin: 0;
+		font-family: helvetica;
+		font-weight: 800;
+		text-align: center;
+    }
+
+    .LRS__investigation-block__item{
+		color: black;
+		padding: 0.75rem;
+		margin:  0.5rem 1rem;
+		background-color: white;
+		margin-bottom: 1rem;
+		font-family: courier;
+		font-size: 0.9rem;
+		border:  1px solid #D8D8D8;
+    }
+
+    .LRS__investigation-block__info{
+		padding: 1rem 1rem 0.5rem;
+    }
+
+    .LRS__investigation-block__img{
+		width: 5rem;
+		margin: auto;
+    }
+
+    .LRS__investigation-block__header{
+    	background-color: #5665D2;
+    	width: 100%;
+    	padding: 1rem;
+    	border-top-left-radius: 4px;
+    	border-top-right-radius: 4px;
+    }
+
+    .LRS__investigation-block__header{
+    	background-color: #5665D2;
+    	width: 100%;
+    	padding: 0.5rem;
+    }
+
+   	.LRS__investigation-block__close{
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+    }
+
+    .LRS__investigation-block__close img{
+		width: 1.5rem;
+		filter: invert(1);
+    }
+
+    .LRS__investigation-block__header img{
+    	width: 100%;
+    }
+
+    @media screen and (max-width: 680px) {
+    	#LRS{
+    		z-index: 200;
+    		bottom: 3.2rem;
+    	}
+		#LRS-copy p{
+      		font-size: 0.75rem;
+    	}
+	    #LRS-amount{
+	    	font-size: 1.25rem;
+	    	padding-left: 0.75rem;
+	    }
+    }
+</style>
+
+<script>
+	var Loop = {
+
+		data: null,
+		status: null,
+		tempVariant: null,
+		tempInput: null,
+		elements: null,
+		config: {
+			productMode: null,
+			variantParam: 'variant',
+			targets: {
+				url: null,
+				input: null,
+				options: null,
+				attr: null,
+				atc: null
+			}
+		},
+		investigator: {
+			count: 0
+		},
+
+		//PUBLIC FUNCTIONS-----------------------------------------
+	    //---------------------------------------------------------
+
+	    //The bread and butter of interactions
+	    setup: function(productMode){
+	    	//Product Modes*** STRING
+	    	//-url
+	    	//-input 
+	    	//-options
+	    	if(productMode === undefined){
+	    		//check to see if product mode is config'd
+	    		if(this.config.productMode === undefined || this.config.productMode === null){
+	    			this._throwError(['Setup Product Mode is undefined.', 'Please look at the Loop Docs to learn how to configure your Product Mode']);
+	    			return false;
+	    		}
+	    		productMode = this.config.productMode;
+	    	}
+
+	    	this.config.productMode = productMode;
+
+
+	    	switch(productMode){
+	    		case 'url':
+	    			//grab what should be the default variant
+	    			{% if template == 'product' %}
+	    				this.tempVariant = {{ product.variants[0].id }};
+	    			{% endif %}
+
+	    			if(Loop.getParams(Loop.config.variantParam)){
+	    				this.tempVariant = Loop.getParams(Loop.config.variantParam);
+	    			}
+	    			this.bindElements();
+	    			break;
+
+	    		case 'input':
+	    			var input;
+	    			if(this.config.targets.input === null){
+	    				this._throwError(['Input Element not defined.','Check out our docs to learn how to configure your Loop Settings']);
+	    				return false;
+	    			}
+	    			input = document.querySelectorAll(this.config.targets.input);
+	    			if(input.length == 1){
+	    				this.bindElements(input);
+	    			}else if(input.length == 0){
+	    				this._throwError(['Could not find any elements with selector "' + this.config.targets.input +'"', "Double check to make sure 'Loop.config.targets.input' is pointed at the right selector."]);
+	    				return false;
+	    			}else if(input.length > 1){
+	    				this._throwError(['Found multiple elements with selector "' + this.config.targets.input +'"', "Please make sure you are targeting a single input containing the selcted variant id as it's value"]);
+	    				return false;
+	    			}
+	    			break;
+
+	    		case 'options':
+	    			var input;
+	    			if(this.config.targets.options === null){
+	    				this._throwError(['Input Element not defined.','Check out our docs to learn how to configure your Loop Settings']);
+	    				return false;
+	    			}
+	    			input = document.querySelectorAll(this.config.targets.options);
+	    			if(input.length == 0){
+	    				this._throwError(['Could not find any elements with selector "' + this.config.targets.input +'"', "Double check to make sure 'Loop.config.targets.input' is pointed at the right selector."]);
+	    				return false;
+	    			}else{
+	    				this.bindElements(input);
+	    			}
+	    			break;
+	    		default:
+	    			this._throwError(['Error in setup function', 'Check to make sure your configs and/or setup mode are configured correctly']);
+	    			break;
+	    	}
+	    },
+	    //used to watch for changes on the PDP
+	    //inputs - required, array, binds with options or hidden input
+	    //atc - optional, element, binds click event and stops cart
+	    bindElements: function(inputs, atc){
+	    	if(this.config.productMode === 'input'){
+	    		inputs.forEach(function(element){
+		   			element.addEventListener('change', function(){
+		   				console.log(this.value);
+		   			});
+	   			});
+	    	}
+	   		if(atc === undefined){
+	   			if(this.config.targets.atc){
+	   				atc = document.querySelector(this.config.targets.atc);
+	   			} else {
+	   				return false;
+	   			}
+	   		}
+	   		atc.addEventListener('click', function(event){
+	   			event.preventDefault();
+	   			event.stopImmediatePropagation();
+	   			Loop.submit(undefined);
+	   		});	
+	    },
+	    //Uses Loop API to create cart
+	    //variant - required, string, variant id
+	    //callback - optional 
+		addToCart: function(variant, callback){
+			if(variant === undefined){
+				if(this.tempVariant != undefined){
+					variant = this.tempVariant;
+				} else {
+					if(this.config.productMode === 'url'){
+						console.log(Loop.getParams(Loop.config.variantParam));
+						var paramVar = Loop.getParams(Loop.config.variantParam);
+						if(paramVar != false){
+							variant = paramVar;
+						} else {
+							this._throwError('No variant found, check your config');
+							return false;
+						}
+					}else{
+						this._throwError('No variant found, check your config');
+						return false;
+					}
+				}
+			}
+			this.data.cart = variant;
+			var payload = {
+				cart: variant
+			};
+			this._requestMachine('POST', 'https://api.loopreturns.com/api/v1/cart/', payload, function(response){
+				Loop.data.token = response.token;
+				if(callback != undefined){
+					console.dir(response);
+					callback(response);
+				}
+			});
+		},
+		submit: function(variant){
+			if(variant === undefined){
+				if(this.tempVariant != undefined){
+					variant = this.tempVariant;
+				}
+				if(this.config.productMode === 'url'){
+					var paramVar = Loop.getParams(Loop.config.variantParam);
+					if(paramVar != false){
+						variant = paramVar;
+					}
+				}
+				if(variant === undefined){
+					this._throwError('No variant found, check your config');
+					return false;
+				}
+			}
+			this.data.cart = variant;
+			var payload = {
+				cart: variant
+			};
+			this._requestMachine('POST', 'https://api.loopreturns.com/api/v1/cart/', payload, function(response){
+				Loop.data.token = response.token;
+				Loop.goBack();
+			});
+		},
+		//update the temp variant
+		updateVariant: function(variant, callback){
+			if(variant === undefined){
+				this._throwError('updateVariant is recieving an undefined variant and cannot update');
+				return false;
+			}
+			this.tempVariant = variant;
+			if(callback != undefined){
+				callback(tempVariant);
+			}
+		},
+		//Dynamic "back to app" function
+		goBack: function(){
+	    	Loop.storage.kill('Loop_data');
+	    	if(this.data.token != undefined){
+		    	window.location.href = "http://" + this.data.loop_domain + "/#/cart/" + this.data.token;
+		    }else{
+		    	window.location.href = 'http://' + this.data.loop_redirect_url;
+	    	} 
+	    },
+	    //Attach api key and save it
+	    setKey: function(key, callback){
+	    	if(key === undefined){
+				this._throwError('Function not being passed Loop API key');
+				return false;
+			}
+	    	this.data.apiKey = key;
+	    	this.storage.set('Loop_data', this.data);
+	    	if(callback != undefined){
+				callback();
+			}
+	    },
+	    //URL decoder
+		getParams: function(param){
+			var result = {};
+			window.location.search.substr(1).split("&").forEach(function(item){
+				var tmp = item.split("=");
+				result[tmp[0]] = decodeURIComponent(tmp[1]);
+			});
+			if(param != undefined){
+				if(result[param]){
+					return result[param];
+				}
+				this._throwError('No Params found with keyword: ' + param);
+				return false;
+			}
+			return result;
+		},
+		//local storage communication
+		storage: {
+			get: function(storeName){
+				return JSON.parse(localStorage.getItem(storeName) || null);
+			},
+			set: function(storeName, storeData){
+				localStorage.setItem(storeName, JSON.stringify(storeData));
+			},
+			kill: function(storeName){
+				localStorage.removeItem(storeName);
+			}
+		},
+		//Binds to variant input often found on PDP
+		attachListener: function(id){
+			var foundElements = document.querySelectorAll(id);
+			if(foundElements.length >= 1){
+				foundElements.forEach(function(selector){
+					selector.addEventListener('change',function(){
+		      			console.log('Variant Changed to: ' + selector);
+		        		Loop.tempVariant = document.querySelector(id).value;
+		      		});
+				});
+		    } else {
+		    	this._throwError('Cannot find selectors to attach to');
+		    }
+		},
+
+		interigate: function(target){
+			if(target.id != ""){
+				return target.id;
+   			}else{
+   				console.log('No ID on objecting, checking classes');
+   				console.log(target.classList);
+   				if(target.classList > 0){
+   					return target.classList;
+   				} else {
+   					return Loop.interigate(target.parentElement);
+   				}
+   			}
+		},
+
+		investigate: function(){
+			//this requires JQuery unfortunately
+			$('body').append('<div id="LRS__investigation-block"><div class="LRS__investigation-block__close"><img src="https://admin.loopreturns.com/img/icons/close.svg"></div><div class="LRS__investigation-block__header"><div class="LRS__investigation-block__img"><img src="https://admin.loopreturns.com/img/LoopLogo_small.png"></div></div><div class="LRS__investigation-block__info"><p>Click the "Add To Cart" Button</p></div></div>');
+			document.addEventListener('click', function(event){
+				console.log(event);
+				Loop.investigator.count++;
+				if(Loop.investigator.count > 3){
+					firstElem = document.querySelector('.LRS__investigation-block__item');
+					firstElem.parentNode.removeChild(firstElem);
+				}
+				event.preventDefault();
+	   			event.stopImmediatePropagation();
+	   			var targetSelector = Loop.interigate(event.target);
+	   			
+				$('#LRS__investigation-block').append('<div class="LRS__investigation-block__item">' + targetSelector + '</div>');
+			});
+		},
+
+	    //ENCAPSULATED FUNCTIONS-----------------------------------
+	    //---------------------------------------------------------
+
+	   	//Vanilla AJAX requests
+		_requestMachine: function(type, href, payload, callback){
+			var data = null;
+
+			if(payload != undefined){
+				data = JSON.stringify(payload);
+			}
+
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+
+			xhr.addEventListener("readystatechange", function () {
+				if (this.readyState === this.DONE) {
+				    callback(JSON.parse(this.responseText));
+				}
+			});
+
+			xhr.open(type, href);
+			xhr.setRequestHeader("x-authorization", this.data.apiKey);
+			xhr.setRequestHeader("content-type", "application/json");
+			xhr.send(data);
+		},
+	   	//Find global returns bar elements
+		_scopeElements: function(){
+			this.elements = {
+				amount: document.getElementById('LRS-amount'),
+				link: document.getElementById('LRS-link'),
+				LRS: document.getElementById('LRS')
+			};
+			
+		},
+	   	//Renders information to the global returns bar
+		_render: function(){
+			var that = this;
+			document.body.classList.add('loop-returns-activated');
+			if(this.data.loop_total != undefined){
+				this.elements.amount.innerHTML = this._moneyFilter(that.data.loop_total);
+			}else{
+				this._throwError(['Cannot find Data on render()'])
+			}
+		},
+	   	//Turn ints into cold hard cash
+		_moneyFilter: function(value){
+	        if(value !== undefined){
+				value = value.toString();
+				if(value.length === 1){
+					var firstHalf = '0';
+					var secondHalf = '0' + value;
+				} else if(value.length === 2){
+					var firstHalf = '0';
+					var secondHalf = value;
+
+				} else {
+					var firstHalf = value.slice(0,(value.length - 2));
+					var secondHalf = value.substring(value.length, (value.length - 2));
+				}
+
+			return '$' + firstHalf + '.' + secondHalf;
+
+			} else {
+				return '$' + value;
+			}
+	    },
+	    //Error control function
+	    _throwError: function(error){
+	    	console.log('[LOOP ERROR]----------------------------');
+	    	if(typeof error === 'string'){
+	    		console.log(error);
+	    	}else if(Array.isArray(error)){
+	    		error.forEach(function(error){
+	    			console.log(error);
+	    		});
+	    	}else{
+	    		console.log('Undefined Error');
+	    	}
+	    },
+	    //Initialize Loop on the store
+		_init: function(){
+			//Check URL to see if user is coming from Loop Returns
+			if(window.location.href.indexOf('loop_total') > -1){
+				this.storage.set('Loop_data', this.getParams());
+				window.history.replaceState({}, 'delete', '/');
+			}
+			//Check data storage to see if they are still in the middle of a return flow
+			this.data = this.storage.get('Loop_data');
+			if(this.data != null){
+				this.status = 'active';
+				this._scopeElements();
+				this._render();
+			}
+		}
+	};
+	//Set it off
+	Loop._init();
+	//Loop.investigate();
+	
+</script>
+
+
+<!-- PRODUCT DATA -->
+{% if template == 'product' %}
+<script>
+//Loop - Product Bundle
+var Loop = Loop || {};
+Loop.variants = {
+{% for variant in product.variants %}
+  {{ variant.id }} : {{ variant | json }}{%unless forloop.last == true%},{%endunless%}
+{% endfor %}
+};
+</script>
+{% endif %}
+ 
+ 

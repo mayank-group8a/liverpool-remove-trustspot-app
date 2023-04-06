@@ -1,0 +1,175 @@
+{% if contentType == 'btn' %}
+<div class="customBISModalWrap">
+  <button id="emailMeWhenAvailableBtn" type="button" class="ProductForm__LabelLink Link Text--subdued " aria-controls="modal-emailMeWhenAvailable">Email me when available</button>
+</div>
+{% elsif contentType == 'modal' %}
+
+<div id="modal-emailMeWhenAvailable" style="display: none;">
+  <button data-fancybox-close class="btn btn-primary" aria-label="Close Modal">{% render 'icon' with 'close' %}</button> 
+  <div class="container">
+    <div class="bisFormAlert"></div>
+    <div class="bisForm">
+      <h2>Email me when available</h2>
+      <p>Get notified via email when this product is back in stock</p>
+      <form method="post" action="bis" id="bis_form" accept-charset="UTF-8" class="Form Form--spacingTight">
+        <p class="required_indicator">( <span class="red">*</span> indicates a required field. )</p>
+        <div class="Form__Item">
+          <input type="email" class="Form__Input" name="email" aria-label="Your email" autocomplete="email" placeholder="Your email *" required="">
+          <label class="Form__FloatingLabel">Enter your email address *</label>
+        </div>
+        <button type="submit" class="Form__Submit Button Button--primary Button--full">Subscribe</button>
+      </form>
+      <p><small>We will send you an email once the product becomes available. Your email address will not be shared with anyone else.</small></p>
+    </div>
+  </div>
+</div>
+<style>
+  #main .Product__Wrapper .Product__InfoWrapper .ProductForm{
+    display: table;
+    width: 100%;
+  }
+  .swym-btn-container[data-position=default] .swym-add-to-watchlist.swym-icontext{
+    display: none !important;
+  }
+  .customBISModalWrap{
+    text-align: center;
+    margin: 15px auto;
+    float: right;
+  }
+  .customBISModalWrap #emailMeWhenAvailableBtn{
+    float: none;
+    display: none;
+  }
+  div#modal-emailMeWhenAvailable {
+    max-width: 600px;
+    position: relative;
+  }
+  div#modal-emailMeWhenAvailable button[data-fancybox-close] {
+    position: absolute;
+    width: 16px;
+    display: block;
+    top: 18px;
+    right: 18px;
+  }
+  div#modal-emailMeWhenAvailable h2{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+  div#modal-emailMeWhenAvailable .Form{
+    margin-bottom: 10px;
+  }
+  .customBISModalWrap #emailMeWhenAvailableBtn {
+    float: none;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    padding: 0px 16px;
+    line-height: 40px;
+    text-transform: uppercase;
+  }
+  .customBISModalWrap #emailMeWhenAvailableBtn:before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 31.5 36' fill='%23fff'%3E%3Cpath id='Icon_awesome-bell' data-name='Icon awesome-bell' d='M15.75,36a4.5,4.5,0,0,0,4.5-4.5h-9A4.5,4.5,0,0,0,15.75,36ZM30.895,25.474c-1.358-1.46-3.9-3.656-3.9-10.849a11.1,11.1,0,0,0-9-10.91V2.25a2.249,2.249,0,1,0-4.5,0V3.715a11.1,11.1,0,0,0-9,10.91c0,7.193-2.542,9.389-3.9,10.849A2.2,2.2,0,0,0,0,27a2.252,2.252,0,0,0,2.257,2.25H29.243A2.252,2.252,0,0,0,31.5,27a2.2,2.2,0,0,0-.605-1.526Z' transform='translate(0)'/%3E%3C/svg%3E%0A");
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    vertical-align: -2px;
+    margin-right: 6px;
+  }
+  div#modal-emailMeWhenAvailable.success .vue-module-heading {
+    /*             display: none; */
+  }
+  div#modal-emailMeWhenAvailable.success {
+    max-width: 900px;
+/*     padding-bottom: 0; */
+  }
+  div#modal-emailMeWhenAvailable .vuex-reco.vue-module-wrapper {
+    margin-top: 0 !important;
+  }
+  div#modal-emailMeWhenAvailable .Alert.Alert--success{
+    text-align: center;
+  }
+  @media(max-width: 767px){
+    .customBISModalWrap {
+      float: none;
+    }
+    .customBISModalWrap #emailMeWhenAvailableBtn {
+      font-size: 13px;
+      width: 100%;
+    }
+    .swym-button-bar.swym-wishlist-button-bar.swym-inject.swym-isa-button-bar{
+      float: none;
+    }
+    div#modal-emailMeWhenAvailable button[data-fancybox-close] {
+      top: 10px;
+      right: 14px;
+    }
+    div#modal-emailMeWhenAvailable {
+      padding: 36px 15px 12px;
+    }
+  }
+</style>
+<script>
+  window.currentVariant={{ selectedVariant | json }};
+//   console.log('ds')
+//   console.log(window.currentVariant);
+  var emailform = document.querySelector('#bis_form input.Form__Input[name="email"]');
+  var formBtn = document.querySelector('#bis_form button[type="submit"]');
+  $(document).on('click', '#emailMeWhenAvailableBtn', function () {
+    $('#modal-emailMeWhenAvailable .bisForm').show();
+    $('#modal-emailMeWhenAvailable .bisFormAlert').html(null);
+    formBtn.disabled = false;
+    formBtn.textContent = 'Subscribe';
+    $.fancybox.open($('#modal-emailMeWhenAvailable'), {
+      touch: false,
+      infobar: false,
+      smallBtn: false,
+      modal: true,
+      beforeLoad   : function() {
+        // alert('its beforeLoad!');
+      },
+      beforeClose   : function() {
+        // alert('its beforeClose!');
+      },
+      afterClose   : function() {
+        //alert('its afterClose!');
+        $('.vue-module-wrapper').appendTo('.shopify-section .Product.Product--small');
+        $('#modal-emailMeWhenAvailable').removeClass('success');
+        $('.vue-module-wrapper .vue-module-heading').text('Similar Products');
+      }                
+    }); 
+  });
+
+  $("#bis_form").submit(function(e){
+    formBtn.disabled = true
+    formBtn.textContent = 'Submitting'
+    console.log(emailform.value);
+    window._swat.sendWatchlist(
+      emailform.value,
+      "email",
+      {
+        epi: window.currentVariant.id,
+        empi: window.current.id,
+        du: window.current.url,
+        iu: window.currentVariant.featured_image.src,
+        pr: window.currentVariant.price/100
+      },
+      function(r) {
+        console.log('r',r) 
+        $('#modal-emailMeWhenAvailable').addClass('success');
+        $('#modal-emailMeWhenAvailable .bisForm').hide();
+        $('#modal-emailMeWhenAvailable .bisFormAlert').append(`<p class="Alert Alert--success" role="alert">Thank you! We will send you an email once the product becomes available.</p>`);
+        $('.vue-module-wrapper').appendTo('#modal-emailMeWhenAvailable .bisFormAlert');
+        $('div#modal-emailMeWhenAvailable.success .vue-module-heading').text('You may also like');
+      },
+      function(e) { console.log('e',e) },
+      1
+    );
+    return false;
+  });
+</script>
+{% endif %}
+

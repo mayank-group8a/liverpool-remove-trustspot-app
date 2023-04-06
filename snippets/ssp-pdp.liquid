@@ -1,0 +1,321 @@
+<script>
+$('document').ready(function() {
+  window.ssp_key = 'liverpooljeans';
+  window.ssp_env = 'prd';
+  window.ssp_version = 'v1';
+  currantVariant = {{ product.selected_or_first_available_variant | json }};
+  // console.log('currantVariant',currantVariant);
+  /* Do not edit below this line */
+  (function() {
+    window.ssp = window.ssp || function() {
+      (window.ssp.q = window.ssp.q || []).push(arguments)
+    };
+    var a = document.createElement('script');
+    a.type = 'text/javascript', a.async = !0,
+    a.src = '//' + window.ssp_key + '.sspinc.io/' + window.ssp_version + '/ssp.js?env=' + window.ssp_env;
+    var b = document.getElementsByTagName('script')[0];
+    b.parentNode.insertBefore(a, b), window.ssp.SNIPPET_VERSION = '1.1.0'
+  })();
+
+	  // console.log('starting fit predictor');
+   /Show Fit Predictor/
+   ssp('start', 'fitpredictor');
+
+    function onSSPLoad(data) {
+      console.log('onSSPLoad');
+      setTimeout(function() {
+        if(document.querySelectorAll('.fp-size').length > 0){
+          var sizeVal = document.querySelector('.fp-size').textContent;
+          // console.log(sizeVal);
+          if(sizeVal.includes("x")){
+            var size = sizeVal.split('x')[0];
+            var inseam = sizeVal.split('x')[1];
+              // console.log(true);
+              // console.log('size: '+size+', Inseam: '+ inseam);
+              if(document.querySelectorAll('input.SizeSwatch__Radio[type="radio"]:checked').length == 0){
+                $('input[type="radio"][value="'+size+'"]').trigger('click');
+                $('button.Popover__Value[data-value="'+inseam+'"]').trigger('click')
+              }
+              // console.log(sizeVal.split('x')[1]);
+            } else {
+              // console.log(false);
+              // console.log(sizeVal);
+              if(document.querySelectorAll('input.SizeSwatch__Radio[type="radio"]:checked').length == 0){
+                $('input[type="radio"][value="'+sizeVal+'"]').trigger('click')
+              }
+          }
+        }
+      }, 500);
+    }
+    ssp("subscribe", "load", onSSPLoad);
+
+    function onFitPredictorPrediction(data) {
+      // console.log("Fit Predictor predicts: ", data);
+      setTimeout(function() {
+        if(document.querySelectorAll('.fp-size').length > 0){
+          var sizeVal = document.querySelector('.fp-size').textContent;
+          // console.log(sizeVal);
+          if(sizeVal.includes("x")){
+            var size = sizeVal.split('x')[0];
+            var inseam = sizeVal.split('x')[1];
+              // console.log(true);
+  
+              // console.log('size: '+size+', Inseam: '+ inseam);
+              if(document.querySelectorAll('input.SizeSwatch__Radio[type="radio"]:checked').length == 0){
+                $('input[type="radio"][value="'+size+'"]').trigger('click');
+                $('button.Popover__Value[data-value="'+inseam+'"]').trigger('click')
+              }
+            } else {
+              // console.log(false);
+              // console.log(sizeVal);
+              if(document.querySelectorAll('input.SizeSwatch__Radio[type="radio"]:checked').length == 0){
+                $('input[type="radio"][value="'+sizeVal+'"]').trigger('click')
+              }
+          }
+        }
+      }, 500);
+    };
+
+    ssp("subscribe", "prediction", onFitPredictorPrediction);
+
+   function getLayout() {
+      var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+
+      return viewPortWidth > 650 ? 'desktop' : 'mobile';
+    }
+
+    function getCurrency() {
+      return '{% if shop %}{{shop.currency}}{%endif %}';
+    }
+
+    function getLanguage() {
+      return 'en';
+    }
+
+    function getMarket() {
+      return 'US';
+    }
+
+    ssp('set', 'site', {
+      layout: getLayout(),
+      currency: getCurrency(),
+      language: getLanguage(),
+      market: getMarket()
+    });
+
+    //Set user context/
+    function getUserId() {
+      return '{% if customer %}{{customer.id}}{%endif %}';
+    }
+
+    function getEmailAddress() {
+      return '{% if customer %}{{customer.email}}{%endif %}';
+    }
+
+    var userId = getUserId();
+    var emailAddress = getEmailAddress();
+
+    // Set user context if User ID or email address is available
+    if (userId || emailAddress) {
+      ssp('set', 'user', {
+        userId: userId,
+        email: emailAddress
+      });
+    }
+    // console.log('selected_variant');
+    // console.log(currantVariant.option1);
+
+    var productVariants = [
+      {% for variant in product.variants %}
+        {
+          id: {{ variant.id | json }},
+          sku: {{ variant.sku | json}},
+          price: {{ variant.price | money_without_currency  }},
+          size: {{ variant.option1 | json}},
+          color: {{ variant.option2  | json }},
+          available: {{variant.available | json }}
+        },
+      {% endfor %}
+    ];
+  
+    window.variants = productVariants;
+
+    function getVariant(size, color) {
+      for (var i = 0; i < productVariants.length; i++) {
+        var variant = productVariants[i];
+        if (variant.size === size && variant.color === color) {
+          return variant;
+        }
+      }
+
+      return null;
+    }
+
+    function getSelectedVariant() {
+      if(getSelectedSize() == getSelectedColor()){
+        console.log('this');
+        var returnValue = null;
+        if(document.querySelectorAll('#product-select-{{product.id}}').length > 0){
+          var thisVariant = Number(document.getElementById('product-select-{{product.id}}').value);
+          for (var i = 0; i < productVariants.length; i++) {
+            var variant = productVariants[i];
+            if (variant.id === thisVariant) {
+              returnValue = variant;
+              //return variant;
+            }
+          }
+        }        
+        return returnValue;
+      } else {
+        console.log('that');
+        return getVariant(getSelectedSize(), getSelectedColor());
+      }
+    }
+
+    function trim(str) {
+      return str.replace(/^(\s|\u00A0)+/, '').replace(/(\s|\u00A0)+$/, '');
+    }
+
+
+    //Set page context/
+
+    ssp('set', 'page', {
+      type: 'pdp'
+    });
+
+
+    /Set product context/
+    function getProductId() {
+      return '{{ product.id }}';
+    }
+
+    function getSizeType() {
+      return 'regular';
+    }
+
+    function getSizes() {
+      var color = getSelectedColor();
+
+      return productVariants.filter(function(variant) {
+        return variant.color === color;
+      }).map(function(variant) {
+        return variant.size;
+      });
+    }
+
+    function getAvailableSizes() {
+      var color = getSelectedColor();
+
+      return productVariants.filter(function(variant) {
+        return variant.available && variant.color === color;
+      }).map(function(variant) {
+        return variant.size;
+      });
+    }
+  
+  	function getAvailableColors() {
+      return productVariants.filter(function(variant) {
+        return variant.available}).map(function(variant) {
+        return variant.color;
+      });
+    } 
+
+    function getSelectedColor() {
+      if(document.querySelectorAll('.Popover__Value.is-selected').length > 0){
+        return document.querySelectorAll('.Popover__Value.is-selected')[0].dataset.value;
+      } else {
+        return currantVariant.option2;
+      }
+    }
+
+    function getSelectedSize() {
+      if(document.querySelectorAll('.HorizontalList__Item input:checked').length > 0){
+        return document.querySelectorAll('.HorizontalList__Item input:checked')[0].value;
+      } else {
+        return currantVariant.option1;
+      }
+    }
+
+    function getPrice() {
+      return currantVariant.price;
+    }
+    
+    var container = document.getElementById('fitpredictor-container');
+
+    var variant = getSelectedVariant();
+
+    console.log(variant && variant.price)
+    ssp('set', 'product', {
+      productId: getProductId(),
+      sizes: getSizes(),
+      availableSizes: getAvailableSizes(),
+      color: variant && variant.color,
+      size: variant && variant.size,
+      price: variant && variant.price
+    });
+    
+	//Track size selection/
+    
+    var sizeSelectors = document.querySelectorAll('.SizeSwatch');
+    sizeSelectors.forEach(function(selector) {
+      selector.addEventListener('click', function() {
+          ssp('set', 'product', {
+            id: getProductId(),
+            size: this.innerText
+          });
+          subscribeToAddToCart();
+        }
+      );
+    });
+  
+	//Track color selection/
+
+    var colorSelectors = document.querySelectorAll('.Popover__Value')
+    
+    
+    colorSelectors.forEach(function(selector) {
+      if(getAvailableColors().indexOf(selector.getAttribute("data-value")) !== -1)  {
+        selector.addEventListener('click', function() {
+              ssp('set', 'product', {
+                id: getProductId(),
+                color: this.dataset.value
+              });
+          
+              subscribeToAddToCart();
+           });
+          }
+    });
+  
+          
+    //Track add to cart/
+    function trackAddToCart() {
+      var variant = getSelectedVariant();
+      console.log('fit-predictor Track AddToCart Fire', variant.price);
+        ssp('track', 'addVariantToCart', {
+        id: String(variant.id),
+        price: variant.price,
+        size: variant.size,
+        color: variant.color,
+        productId: getProductId(),
+        sizeType: getSizeType()
+      });
+    }
+
+  var currentAddToCartButton;
+  
+  function subscribeToAddToCart() {
+    console.log('fit-predictor init');
+    setTimeout(function() {
+      	currentAddToCartButton && currentAddToCartButton.removeEventListener('click', trackAddToCart);
+      
+  	 	currentAddToCartButton = document.querySelector('.ProductForm__AddToCart');
+  
+	  	currentAddToCartButton.addEventListener('click', trackAddToCart);
+    });
+  }
+  
+  subscribeToAddToCart();
+});
+
+
+</script>

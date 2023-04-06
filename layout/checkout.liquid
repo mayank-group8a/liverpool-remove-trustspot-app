@@ -1,0 +1,229 @@
+
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <script>(function () { function asyncLoad() { var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://s3.eu-west-1.amazonaws.com/production-klarna-il-shopify-osm/06813f2bbb40bf097c85cc33982be5da59692f3f/liverpool-jeans-company.myshopify.com-1680034791390.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (window.attachEvent) { window.attachEvent('onload', asyncLoad); } else { window.addEventListener('load', asyncLoad, false); } })(); </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    <!-- ADDRESS VALIDATOR -->
+<script async src="https://d3ox8tdk614ykk.cloudfront.net/pobox_checker.js"></script>
+    {% include 'sr_script' %}
+    <script src='https://code.jquery.com/jquery-3.5.1.min.js'></script>
+    <script>(function(d){var e=d.createElement('script');e.src='https://td.yieldify.com/yieldify/code.js?w_uuid=de10e1ba-a417-4a9b-b916-1906a661d623&k=1&loca='+window.location.href;e.async=true;d.getElementsByTagName('head')[0].appendChild(e);}(document));</script>
+    <script type="text/javascript" async="" src="https://api.bluecore.com/triggermail.js/liverpool_style.js?shop=liverpool-jeans-company.myshopify.com"></script>
+
+   <!-- Modi added JS -->
+     <script>
+     !function(f,b,e,v,n,t,s)
+     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+     n.queue=[];t=b.createElement(e);t.async=!0;
+     t.src=v;s=b.getElementsByTagName(e)[0];
+     s.parentNode.insertBefore(t,s)}(window, document,'script',
+     'https://connect.facebook.net/en_US/fbevents.js');
+     fbq('init', '597201047337007');
+     fbq('track', 'PageView');
+    {% comment %}
+      fbq('track', 'ViewContent');
+    {% endcomment %}
+   </script>
+   <noscript>
+     <img height="1" width="1" style="display:none" 
+         src="https://www.facebook.com/tr?id=597201047337007&ev=PageView&noscript=1"/>
+   </noscript>
+   <!-- Modi added JS -->
+    {% include 'qikify-navigator' %}
+  {% include 'qikify-smartmenu' %}
+
+    
+  <!-- LiveConnectTag for advertisers -->
+  <script type="text/javascript" src="//b-code.liadm.com/a-08on.min.js" async="true" charset="utf-8"></script>
+  <!-- LiveConnectTag for advertisers -->
+
+  {%- comment -%} Begin TryNow Checkout {%- endcomment -%}
+  {%- assign isTryNow = false -%}
+  {%- for item in checkout.line_items -%}
+    {%- for p in item.properties -%}
+    {%- if p.first == 'tn_enabled' and p.last == 'true' -%}
+        {%- assign isTryNow = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- if isTryNow == true -%}
+    {% render 'trynow-components' %}
+    {{ 'trynow.scss.css' | asset_url | stylesheet_tag }}
+  {%- else -%}
+    <script>
+      window.onload= function(){
+        var properties = document.querySelectorAll('.product__description__property');
+        properties.forEach(property => {
+          if(property.innerHTML.includes('tn_enabled')){
+            property.remove();
+          }
+
+          if(property.innerHTML.includes('tn_final_sale')){
+            property.remove();
+          }
+        })
+      }
+    </script>
+  {%- endif -%}
+  {%- comment -%} End TryNow Checkout {%- endcomment -%}
+
+<!-- Yotpo Checkout Module -->
+    <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/QaKq4D3fjOCf2xUm1jK2vg" async></script>
+    <div class="yotpo-widget-instance" data-yotpo-instance-id="317076"></div>
+  <!-- End Yotpo Checkout Module -->
+  
+</head>
+  <body>
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </header>
+          <main class="main__content" role="main">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+    <div name="sr_loadMOVDiv"></div>
+    
+    <!-- MODI 21-04-2021 added -->
+    <script>
+      $("[data-payment-form]").submit(function(e){
+        var checked = $('[data-payment-form]').find('[data-payment-subform] input[type="radio"]:checked').closest('.radio__input').siblings('.radio__label').find('label').text();
+        var paymentGateway = $.trim(checked);
+        console.log('Payment Gateway: '+$.trim(checked));
+        fbq('track', 'AddPaymentInfo');
+        return false;
+      });
+    </script> 
+    <!-- MODI 21-04-2021 added -->
+  </body>
+  <!DOCTYPE html>
+</html>
+<!-- MKT added code to fix SR shipping issue -->
+<script>
+$( document ).ready(function() {
+	var reload_checkout = getCookie('reload_cart');
+    if(reload_checkout == 'yes'){
+       var previous_step       = getUrlParameter('previous_step');
+       var step                = getUrlParameter('step');
+       if(previous_step == 'contact_information' && step == 'shipping_method'){
+         console.log("Reload Checkout call!");
+         setCookie('reload_cart','no',360);
+         setTimeout(function(){ 
+        	location.reload();
+         }, 1000);
+       }
+    }
+    console.log( "ready!" );
+    var sr_mov       = getUrlParameter('attributes%5B_sr_mov%5D');
+    var sr_token     = getUrlParameter('attributes%5B_sr_token%5D');
+    var sr_token_two = getUrlParameter('attributes%5Bsr_token%5D');
+    var step         = getUrlParameter('step');
+     
+    if(sr_mov != '' && sr_token != '' && sr_token_two != '' && step == 'contact_information'){
+      console.log("Set Coockie Done!");
+      setCookie('reload_cart','yes',360);
+      if(window.location.pathname != ''){
+      	//var redirect_call = 'https://liverpooljeans.com'+window.location.pathname+'?previous_step=contact_information&step=shipping_method';
+      	//window.location.href = redirect_call;
+       // _shoprunner_com.updateShipping();
+       // $("#continue_button").click();
+        //location.reload();
+      }
+    }
+    console.log(sr_mov);
+    console.log(sr_token);
+    console.log(sr_token_two);
+    console.log(step);
+});
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+    return false;
+};
+  
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+</script>
+<!-- MKT added code to fix SR shipping issue -->
+
+<style>
+  .anyflexbox .step__footer{
+    -webkit-box-direction: inherit;
+    -webkit-flex-direction: inherit;
+    -ms-flex-direction: inherit;
+    flex-direction: inherit; 
+  }
+  
+  .main .edit_checkout .field__input {
+    border-color: #949594;
+  }
+</style>

@@ -1,0 +1,121 @@
+<div class="shop_by_category">
+  <div class="header">
+    <h2 class="SectionHeader__Heading Heading u-h1">{{ section.settings.title }}</h2>
+  </div>
+  <div class="shop_by_category_block Grid">
+  {% for block in section.blocks %}
+      {% case block.settings.width %}
+        {% when '25%' %}
+          {%- assign max_height = 250 -%}
+          {%- assign block_width = '1/4--lap-and-up' -%}
+        {% when '33%' %}
+          {%- assign max_height = 345 -%}
+          {%- assign block_width = '1/3--lap-and-up' -%}
+        {% when '50%' %}
+          {%- assign max_height = 530 -%}
+          {%- assign block_width = '1/2--lap-and-up' -%}
+        {% when '100%' %}
+          {%- assign max_height = 1090 -%}
+          {%- assign block_width = '1/1--lap-and-up' -%}
+      {% endcase %}
+  
+  <div class="category__block Grid__Cell {{ block_width }}">
+    <a href="{{ block.settings.button_link }}">
+      <div class="block_wrap">
+      <h1 class="u-h1">{{ block.settings.title }}</h1>
+      <p>{{ block.settings.btn_label }}</p>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Shop By Collection",
+    "settings": [
+		{
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Custom content"
+      }
+	],
+	"blocks": [
+{
+        "type": "text",
+        "name": "Text",
+        "settings": [
+		{
+		"type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Collection Title"
+		},
+		{
+		"type": "text",
+        "id": "btn_label",
+        "label": "Button Label",
+        "default": "Shop Now"
+		},
+		{
+            "type": "select",
+            "id": "width",
+            "label": "Container width",
+            "default": "25%",
+            "options": [
+              {
+                "value": "25%",
+                "label": "25%"
+              },
+              {
+                "value": "33%",
+                "label": "33%"
+              },
+              {
+                "value": "50%",
+                "label": "50%"
+              },
+              {
+                "value": "100%",
+                "label": "100%"
+              }
+            ]
+          },
+		{
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          }
+]
+}
+	],
+	"presets": [
+    {
+      "category": "Collection",
+      "name": "Shop By Collection",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+		{
+          "type": "text"
+        }
+      ]
+    }
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

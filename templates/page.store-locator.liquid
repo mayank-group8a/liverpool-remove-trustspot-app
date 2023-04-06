@@ -1,0 +1,25 @@
+<div class="Container">
+  <div class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1">{{ page.title }}</h1>
+    </div>
+  </div>
+
+  <div class="PageContent  Rte">
+    {{ page.content }}
+  </div>
+</div>
+
+<form method="get" action="{{ 'LiverpoolUpdateStoreLocatorFile_feed_04-01-23_new1.csv' | file_url }}" id="file-download">
+</form>
+
+<script>
+var url_string = window.location.href;
+var url = new URL(url_string);
+var file = url.searchParams.get("file");
+  $(document).ready(function(){
+    if(file == "1"){
+    	$('#file-download').submit();
+  	}
+  });
+</script>

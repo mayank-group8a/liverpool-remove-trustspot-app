@@ -1,0 +1,244 @@
+<script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+<script src="https://components.trynow.net/shopify/5.0.2/trynow-components.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.js"></script>
+
+<style>
+  @font-face {
+    font-family: "AkkuratLL";
+    src: url('{{ "AkkuratLLWeb-Regular.woff" | asset_url }}') format("woff"),
+      url('{{ "AkkuratLLWeb-Regular.woff2" | asset_url }}') format("woff2");
+  }
+  @font-face {
+    font-family: "GTFlexaExtendedMedium";
+    src: url('{{ "GT-Flexa-Extended-Medium.woff" | asset_url }}') format("woff"),
+      url('{{ "GT-Flexa-Extended-Medium.woff2" | asset_url }}') format("woff2");
+  }
+  @font-face {
+    font-family: "GTFlexaMono";
+    src: url('{{ "GT-Flexa-Mono-Regular.woff" | asset_url }}') format("woff"),
+      url('{{ "GT-Flexa-Mono-Regular.woff2" | asset_url }}') format("woff2");
+  }
+  @font-face {
+    font-family: "GTFlexaExtendedRegular";
+    src: url('{{ "GT-Flexa-Extended-Regular.woff" | asset_url }}')
+      format("woff"),
+      url('{{ "GT-Flexa-Extended-Regular.woff2" | asset_url }}') format("woff2");
+  }
+</style>
+
+<!-- PDP - CTAs logic -->
+<script>
+  const handleTryNowBtn = () => {
+    const tryNowProperty = document.querySelector("#trynow-property");
+    tryNowProperty.setAttribute("value", "true");
+  };
+  const handleOriginalBtn = () => {
+    const tryNowProperty = document.querySelector("#trynow-property");
+    tryNowProperty.setAttribute("value", "false");
+  };
+  const handleFinalSaleButtonClick = () => {
+    const newProperty = document.querySelector("#final_sale");
+    newProperty.setAttribute("value", "true");
+  };
+</script>
+
+<!-- Handle TryNow popups -->
+<script>
+  const TryNowConfig = {
+		storeName: 'Liverpool',
+		days: 7,
+		items: 6,
+	};
+
+	const initPopUp = () => {
+		const PopUpSettings = {
+			storeName: TryNowConfig.storeName,
+			tryNowItems: TryNowConfig.items,
+			tryNowDays: TryNowConfig.days,
+		};
+		const body = document.querySelector('body');
+		const popupContainer = document.createElement('div');
+		popupContainer.classList.add('tn-popup');
+		const popUpModal = React.createElement(TryNowComponents.PopupModal, {
+			settings: PopUpSettings,
+		});
+		body.append(popupContainer);
+		ReactDOM.render(popUpModal, popupContainer);
+	};
+
+	document.addEventListener('DOMContentLoaded', initPopUp, false);
+
+	const initInfoIcon = () => {
+		const elements = document.querySelectorAll('.tn-info-icon');
+		elements.forEach((node) => {
+			const infoIcon = React.createElement(TryNowComponents.InfoIcon);
+			ReactDOM.render(infoIcon, node);
+		});
+	};
+	document.addEventListener('DOMContentLoaded', initInfoIcon, false);
+</script>
+
+<script>
+  document.addEventListener('cartChanged', () => {
+    tryNowCartLogic();
+  })
+
+  document.addEventListener('quantityChanged', () => {
+    tryNowCartLogic();
+  })
+
+  document.addEventListener('sideCartOpened', () => {
+    tryNowCartLogic();
+  });
+
+  window.addEventListener('load', () => {
+    tryNowCartLogic();
+  })
+
+  document.addEventListener('variantChanged', (product) => {
+    setTimeout(() => {
+      let tryNowButtonPdp = document.querySelector('#tn-pdp-btn');
+      let tryNowInfoPdp = document.querySelector('#tn-info-pdp');
+      let buyItNowButton = document.querySelector('#tn_update_url');
+      let addToCartButton = document.querySelector('.ProductForm__AddToCart:not(#tn-pdp-btn)')
+      
+      if (product?.detail?.tags.includes('TryNow') && addToCartButton.textContent.toUpperCase() === 'ADD TO CART') {
+        tryNowButtonPdp.classList.remove('tn-hidden');
+        tryNowInfoPdp.classList.remove('tn-hidden');
+        buyItNowButton.classList.add('tn-hidden');
+      } else {
+        tryNowButtonPdp.classList.add('tn-hidden');
+        tryNowInfoPdp.classList.add('tn-hidden');
+        buyItNowButton.classList.remove('tn-hidden');
+      }
+    }, 100)
+  }) 
+
+  const tryNowCartLogic = () => {
+    const tryNowLimit = 6;
+    let hasTryNowTag = true;
+    let tryNowCount = 0;
+    let itemCount = 0;
+    let tryNowRemaining = 0;
+    
+    fetch("/cart.json")
+      .then((response) => response.json())
+      .then((cart) => {
+        cart.items.forEach((item) => {
+          if (item.properties?.hasOwnProperty("tn_enabled")) {
+            if (item.properties.tn_enabled == "true") {
+              tryNowCount = tryNowCount + item.quantity;
+            } 
+          }
+          itemCount = itemCount + item.quantity;
+        });
+
+        tryNowRemaining = tryNowLimit - tryNowCount;
+
+        let sideCartWidget = document.querySelector(".tn-widget");
+        let sideCartWidgetRemaining = document.querySelector(".tn-widget-remaining");
+
+        let programDetails = document.querySelector("#tn-info-program");
+        let tryNowDueToday = document.querySelector(".tn-due-today");
+
+        if (itemCount === 0) {
+          sideCartWidget?.classList.add("tn-hidden");
+          
+          programDetails?.classList.add("tn-hidden");
+
+          tryNowDueToday.classList.add("tn-hidden");
+
+        } else if (tryNowCount > 0 && tryNowRemaining > 0) {
+          sideCartWidget.classList.remove("tn-hidden");
+          sideCartWidgetRemaining.innerHTML = tryNowRemaining;
+
+          programDetails.classList.remove("tn-hidden");  
+          
+          tryNowDueToday.classList.remove("tn-hidden");
+
+        } else if (tryNowCount >= tryNowLimit) {
+          sideCartWidget.classList.add("tn-hidden");
+          sideCartWidgetRemaining.innerHTML = tryNowRemaining;
+
+          programDetails.classList.remove("tn-hidden");
+
+          tryNowDueToday.classList.remove("tn-hidden");
+
+        } else {
+          sideCartWidget.classList.add("tn-hidden");
+
+          programDetails.classList.add("tn-hidden");
+
+          tryNowDueToday.classList.add("tn-hidden");
+        }
+      });
+    }
+</script>
+
+<!-- Checkout -->
+<script>
+  window.tryNowCheckout = {
+    shippingAddress: {{ checkout.shipping_address | json }},
+    email: '{{ checkout.email }}',
+  }
+</script>
+
+{% if checkout != nil %}
+<script>
+  {% assign isTryNow = false %}
+  {% for item in checkout.line_items %}
+    {% for property in item.properties %}
+      {% if property.first == 'tn_enabled' and property.last == 'true' %}
+        {% assign isTryNow = true %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  {% if isTryNow == true %}
+      ShopifyPay = null;
+  {% endif %}
+
+  document.addEventListener('page:load', function () {
+    TryNowComponents.restyleCheckout();
+    setTimeout(() => {
+      document.querySelector(".tn-autorize-text").innerHTML += ".";
+
+      document.querySelector(".total-recap__final-price").innerHTML = "$0.00"
+
+      let properties = document.querySelectorAll('.product__description__property');
+      properties.forEach(property => {
+          if(property.innerHTML.includes('tn_enabled: true')){
+              property.innerHTML = "<img class='tn-info-logo tn-info-logo-checkout' src='https://components.trynow.net/images/trynow_logo.svg' alt='TryNow Logo'>";
+              property.style.display = "block";
+          }
+
+          if(property.innerHTML.includes('tn_final_sale')){
+            property.innerHTML = "FINAL SALE - NON RETURNABLE";          
+          }
+      })
+    }, 50)
+  });
+
+  if (!window.location.href.includes('&step=payment_method')) {
+    document.addEventListener('page:change', function () {
+      TryNowComponents.restyleCheckout();
+
+      setTimeout(() => {  
+        document.querySelector(".total-recap__final-price").innerHTML = "$0.00"
+  
+        let properties = document.querySelectorAll('.product__description__property');
+        properties.forEach(property => {
+            if(property.innerHTML.includes('tn_enabled: true')){
+                property.innerHTML = "<img class='tn-info-logo tn-info-logo-checkout' src='https://components.trynow.net/images/trynow_logo.svg' alt='TryNow Logo'>";
+                property.style.display = "block";
+            }
+
+            if(property.innerHTML.includes('tn_final_sale')){
+              property.innerHTML = "FINAL SALE - NON RETURNABLE";
+            }
+        })
+      }, 50)
+    });
+  }
+</script>
+{% endif %}

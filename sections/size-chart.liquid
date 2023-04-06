@@ -1,0 +1,231 @@
+<!-- <buton id="sizeChartBtn" data-fancybox data-src="#sizeChart" data-modal="true">Size Chart</buton> -->
+<div id="sizeChart" style="display: none;">
+    <button data-fancybox-close class="btn btn-primary" aria-label="Close Modal">{% include 'icon'
+        with 'close' %}</button>
+    <h2>FIND YOUR SIZE</h2>
+    <div class="tabWrap">
+
+        {%- assign pageHndle = blnk -%}
+        {%- assign internationalPageHndle = blnk -%}
+        {%- for tag in product.tags -%}
+        {%- if tag == 'size_chart_women' or tag == 'size_chart_men' or tag == 'size_chart_plus' or tag == 'size_chart_petite' -%}
+        {%- case tag -%}
+        {%- when 'size_chart_women' -%}
+        {%- assign pageHndle = 'womens-size-chart' -%}
+        {%- assign internationalPageHndle = 'womens-international-size-chart' -%}
+        {%- when 'size_chart_men' -%}
+        {%- assign pageHndle = 'men-fit-guide' -%}
+        {%- assign internationalPageHndle = 'men-international-size-chart' -%}
+        {%- when 'size_chart_plus' -%}
+        {%- assign pageHndle = 'plus-size-chart' -%}
+        {%- assign internationalPageHndle = 'plus-international-size-chart' -%}
+        {%- when 'size_chart_petite' -%}
+        {%- assign pageHndle = 'petite-size-chart' -%}
+        {%- assign internationalPageHndle = 'petite-international-size-chart' -%}
+        {%- endcase -%}
+        {%- endif -%}
+        {%- endfor -%}
+
+
+
+      <span id="pgHandle" class="hide">{{ pageHndle }}</span>
+      
+        <div class="tabMenu">
+            {%- if pageHndle != blank -%}
+            <div class="tabiteam-wrp tabiteam-wrp-us"><button type="button" class="tabiteam active"
+                value="us">U.S.</button></div>
+            {%- endif -%}
+          	{% comment %}
+            {%- if pages[internationalPageHndle].content != blank -%}
+            <div class="tabiteam-wrp tabiteam-wrp-international"><button type="button" class="tabiteam"
+                value="international">International Conversions</button></div>
+            {%- endif -%}
+          {% endcomment %}
+            {%- if pages['how-to-measure'].content != blank -%}
+            <div class="tabiteam-wrp tabiteam-wrp-howtomeasure"><button type="button" class="tabiteam"
+                value="howtomeasure">How To Measure</button></div>
+            {%- endif -%}
+            <div class="tabiteam-wrp tabiteam-wrp-buttonGroup">
+                <div class="buttonGroup">
+                    <button type="button" class="size-unit-switch active">IN</button>
+                    <button type="button" class="size-unit-switch">CM</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="tab-container">
+            {%- if pages[pageHndle].content != blank -%}
+            <div class="tab-box tab-us active">
+                <div class="Rte">
+                    {{- pages[pageHndle].content -}}
+                </div>
+            </div>
+            {%- endif -%}
+            {%- if pages[internationalPageHndle].content != blank -%}
+            <div class="tab-box tab-international {%- if pageHndle == blank -%}active{% endif %}">
+                <!-- <h2 class="tab-heading">International Conversions</h2> -->
+                <div class="Rte">
+                    {{- pages[internationalPageHndle].content -}}
+                </div>
+            </div>
+            {%- endif -%}
+            {%- if pages['how-to-measure'].content != blank -%}
+            <div class="tab-box tab-howtomeasure">
+                {% assign tabs = pages['how-to-measure'].content | split: '<!-- split -->' %}
+                    {% for tabc in tabs %}
+                    <div class="tabs-content">
+                        <div class="Rte">{{ tabc | split: '<!-- split -->' | last }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            {%- endif -%}
+        </div>
+    </div>
+</div>
+
+<style>
+    div#sizeChart.fancybox-content {
+        width: 60vw;
+        height: 80%;
+        padding:0;
+    }
+    div#sizeChart.fancybox-content button.btn.btn-primary[data-fancybox-close] {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+        color: #1c1b1b;
+        z-index: 9999;
+    }
+    
+    div#sizeChart.fancybox-content > h2 {
+        background: #fff;
+        padding: 30px 40px;
+        position: sticky;
+        top: 0;
+        z-index: 9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+    }
+    div#sizeChart .tabWrap {
+        padding: 0px 40px 30px;
+    }
+    
+    .tabWrap .tabMenu {
+        margin: 0 -10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .tabWrap .tabMenu .tabiteam-wrp {
+        margin: 0 10px;
+    }
+    
+    
+    
+    .tabWrap .tabMenu button.tabiteam.active {
+        font-weight: bold;
+    }
+    
+    .tabWrap .tabMenu .buttonGroup {
+        display: flex;
+        width: 90px;
+    }
+    
+    .tabWrap .tabMenu .buttonGroup button.size-unit-switch {
+        flex: 0 0 45px;
+        width: auto;
+        border: 1px solid #ccc;
+        margin: 0 0px 0 -1px;
+        line-height: 28px;
+        font-size: 12px;
+    }
+    .tabWrap .tabMenu .buttonGroup button.size-unit-switch.active {
+        background-color: #ececec;
+    }
+    
+    .responsive-table table {
+        width: 100%;
+        text-align: left;
+        margin: auto;
+    }
+    
+    .tabWrap .tab-container .tab-box {
+        display: none;
+    }
+    
+    .tabWrap .tab-container .tab-box.active {
+        display: block;
+    }
+    .tabWrap .tab-container .tab-box .Rte h6{
+        margin-bottom: 0;
+    }
+    .tabWrap .tab-container .tab-box .Rte h4.size-chart-title {
+        text-align: center;
+    }
+    .tabWrap .tab-container .tab-box .Rte .table-unite {
+        display: none;
+    }
+    .tabWrap .tab-container .tab-box .Rte .table-unite.active {
+        display: block;
+    }
+    @media(max-width:991px){
+        div#sizeChart.fancybox-content {
+            width: 80vw;
+        }
+    }
+    @media(min-width:768px){
+        .tabWrap .tabMenu .tabiteam-wrp.tabiteam-wrp-howtomeasure {
+            margin: 0 10px 0 auto;
+        }
+    }
+    @media(max-width:767px){
+        div#sizeChart.fancybox-content {
+            width: 90%;
+            height: 90%;
+        }
+        div#sizeChart.fancybox-content > h2 {
+            padding: 10px 20px;
+            margin-bottom: 0;
+        }
+        div#sizeChart .tabWrap {
+            padding: 12px 20px;
+        }
+        div#sizeChart .tabWrap .tab-container{
+            width: 100%;
+            overflow: hidden;
+        }
+        .tabWrap .tabMenu  {
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .tabWrap .tabMenu .tabiteam-wrp {
+            margin: 0 5px;
+        }
+        .tabWrap .tabMenu .tabiteam-wrp.tabiteam-wrp-buttonGroup {
+            flex: 1 1 100%;
+            justify-content: center;
+            display: flex;
+            margin-top: 10px;
+        }
+        .tabWrap .tabMenu .tabiteam-wrp button.tabiteam {
+            font-size: 12px;
+        }
+        div#sizeChart.fancybox-content button.btn.btn-primary[data-fancybox-close] {
+            right: 20px;
+            top: 8px;
+        }
+    }
+  .hide{display:none;}
+</style>
+<script>
+  $(document).ready(function () {
+    var handle = $("#pgHandle").html();
+    if ( handle.length>0)
+      $("."+handle).show();
+    else 
+      $(".blankHandle").show();
+  });
+</script>

@@ -1,0 +1,57 @@
+{% form 'customer', class: 'recaptchaForm newsletter-form' %}
+<!-- /snippets/newsletter-subscribe.liquid -->
+{% if form.errors %}
+<div id="newsletterFerrors">
+  {{ form.errors | default_errors }}
+</div>
+{% endif %}
+
+{% if form.posted_successfully? %}
+<p class="Form__Alert Alert Alert--success" id="newsletterFerrors">{{ 'footer.newsletter.success' | t }}</p>
+
+<script>
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?discount=LOVELP20';
+    window.history.pushState({path:newurl},'',newurl);
+  }
+</script>
+{% else %}
+<input type="hidden" name="contact[tags]" value="prospect, email subscribe">
+<div class="input-row">
+  <div class="input-wrapper">
+    <label for="email">E-mail *</label>
+    <input type="email" name="contact[email]" id="email" placeholder="email@example.com" autocomplete="email" class="Form__Input" aria-describedby="newsletterFerrors" required>
+  </div>
+  <div class="button-wrapper">
+    <button type="submit" id="subscribe" class="Form__Submit Button Button--primary g-recaptcha" 
+      data-callback='onSubmit' 
+      data-sitekey="{{ settings.recaptchav3 }}" 
+      data-action='submit'>Subscribe</button>
+  </div>
+</div>
+{% endif %}
+{% endform %}
+
+
+      <script>
+        /** LOAD */
+        _iub.cons_instructions.push(["load",{
+          submitElement: document.getElementById("subscribe"),
+          form: {
+            selector: document.getElementById("footer-newsletter"),
+            map: {          
+              subject: {
+                email: "contact[email]",
+                phone: "contact[tags]"
+              }
+            }
+          },
+          consent: {
+            legal_notices: [
+              {
+                identifier: 'privacy_policy',
+              }
+            ],
+          }
+        }]);
+      </script>

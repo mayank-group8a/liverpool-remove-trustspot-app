@@ -1,0 +1,96 @@
+{% liquid
+	  assign selected_variant = product.selected_or_first_available_variant
+    assign splitArrays = selected_variant.sku | split: "-"
+    assign splitArray = splitArrays[2] | prepend: '-'
+    assign selected_sku = selected_variant.sku | remove: splitArray
+%}
+<!-- <h2 class="selected_variantSku">sku: {{ selected_sku }}</h2> -->
+<style>
+  a#jumplink-button {
+    position: sticky;
+    top: calc(76% + (var(--header-height) / 2));
+    left: 0;
+    z-index: 2;
+    right: auto;
+    width: auto;
+    margin-left: 0;
+    width: 80px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    line-height: 18px;
+    padding: 17px 3px 0;
+    border-radius: 50%;
+    float: right;
+    height: 80px;
+    font-size: 13px;
+  }
+  a#jumplink-button svg.bi.bi-chevron-compact-down {
+    margin: -8px 0;
+  }
+  /*
+  In the example below, "stylitics-widget-container" is the id of the widget container on your page.
+  You control the id of this element, so the id can be anything you want.
+  */
+
+  #stylitics-widget-container .stylitics-bundle-badge {
+    top: 5%;
+    left: 5%;
+    z-index: 1;
+    max-width: 20%;
+  }
+  #stylitics-widget-container .stylitics-bundle-badge img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+<div class="Container stylitics" id="styliticsContainer" style="display: none;">
+  <h2 class="SectionHeader__Heading Heading u-h1 SectionHeader--center">Style it With</h2>
+  <script src="https://web-assets.stylitics.com/v3-classic/latest/classic.release.js" ></script>
+  <div id="stylitics-widget-container"></div>
+  <script>
+    let widgetInstance = new StyliticsClassicWidget( "liverpool", "stylitics-widget-container", {
+      api: {
+        item_number: "{{ selected_sku }}",
+        min: 3,
+        max: 6,
+      },
+    })
+    widgetInstance.on("mount", "bundle", (data) => {
+        let bundle = data.bundle;
+        let element = data.element;
+        // add if statement to make sure badge is added to the correct bundles
+        if (bundle["on-model-image"]) {
+            //create image element
+            let badge = document.createElement("img");
+            // add relative path to the img
+            badge.setAttribute("src", "//docs.stylitics.com/img/shop_the_look.svg");
+            //append img to the "stylitics-bundle-badge" div
+            element.querySelector(".stylitics-bundle-badge").appendChild(badge);
+        }
+    })
+    widgetInstance.on("mount", "bundles", function (data) {
+      if (data.bundles && data.bundles.length > 2) {
+        // End of Model looks page        
+        let jumplinkElement = document.getElementById("jumplink-button");
+        jumplinkElement.style.display = "inline-block";
+        // un-hide jumplink after widget has loaded with bundles
+
+        let styliticContainer = document.getElementById("styliticsContainer");
+        styliticContainer.style.display = "block"; 
+        // un-hide styliticContainer after widget has loaded with bundles
+        
+      }
+    })
+    widgetInstance.start();
+    
+    // Modi added for scroll animation
+    $('#jumplink-button').click(function (){
+      headerHeight = $('#shopify-section-header').outerHeight() + $('#section-announcement').outerHeight();
+      console.log(headerHeight);
+      $('html, body').animate({
+        scrollTop: document.querySelector('.stylitics').offsetTop - headerHeight - 10
+      }, 2000);
+    });
+  </script>
+</div>

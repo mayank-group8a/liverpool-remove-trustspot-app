@@ -1,0 +1,57 @@
+<section data-section-id="reset-password" data-section-type="reset-password">
+  <div class="Container">
+    <div class="PageContent PageContent--fitScreen PageContent--extraNarrow">
+      {%- form 'create_customer', name: 'create_customer', class: 'recaptchaForm Form Form--spacingTight', id: 'create_customer' -%}
+        <div class="Form__Header">
+          <h1 class="Form__Title Heading u-h1">{{ 'customer.register.title' | t }}</h1>
+          <p class="Form__Legend">{{ 'customer.register.description' | t }}</p>
+        </div>
+
+        {%- if form.errors -%}
+          <div class="Form__Alert Alert Alert--error">
+            <ul class="Alert__ErrorList">
+              {%- for field in form.errors -%}
+                {%- if field == 'form' -%}
+                  <li class="Alert__ErrorItem" role="alert">{{ form.errors.messages[field] }}</li>
+                {%- else -%}
+                  <li class="Alert__ErrorItem" role="alert"><strong>{{ form.errors.translated_fields[field] }}</strong> {{ form.errors.messages[field] }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      
+        <p class="required_indicator">( <span class="red">*</span> indicates a required field. )</p>
+
+        <div class="Form__Item">
+          <input type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autocomplete="given-name" autofocus>
+          <label class="Form__FloatingLabel">{{ 'customer.register.first_name' | t }}</label>
+        </div>
+
+        <div class="Form__Item">
+          <input type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}" autocomplete="family-name">
+          <label class="Form__FloatingLabel">{{ 'customer.register.last_name' | t }}</label>
+        </div>
+
+        <div class="Form__Item">
+          <input type="email" class="Form__Input" name="customer[email]" aria-label="{{ 'customer.register.email' | t }}" placeholder="{{ 'customer.register.email' | t }} *" autocomplete="email" required="required">
+          <label class="Form__FloatingLabel">{{ 'customer.register.email' | t }} *</label>
+        </div>
+
+        <div class="Form__Item">
+          <input type="password" class="Form__Input" name="customer[password]" aria-label="{{ 'customer.register.password' | t }}" placeholder="{{ 'customer.register.password' | t }} *" autocomplete="current-password" required="required">
+          <label class="Form__FloatingLabel">{{ 'customer.register.password' | t }} *</label>
+        </div>
+
+        <button type="submit" class="Form__Submit Button Button--primary Button--full g-recaptcha" 
+        data-callback='onSubmit'
+        data-sitekey="{{ settings.recaptchav3 }}" 
+        data-action='submit'>{{ 'customer.register.submit' | t }}</button>
+
+        {% include 'oxi-social-login' %}
+
+        <small class="disclaimer_html">{{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}</small>
+      {%- endform -%}
+    </div>
+  </div>
+</section>

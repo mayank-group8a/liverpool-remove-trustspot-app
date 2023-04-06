@@ -1,0 +1,29 @@
+{% comment %}
+{%- layout 'theme-plain' -%}
+{% endcomment %}
+<div class="Container">
+  <div class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1">{{ page.title }}</h1>
+    </div>
+</div>
+
+  <div class="PageContent PageContent--narrow Rte">
+    {{ page.content }}
+  </div>
+</div>
+<style type="text/css">
+	div#shopify-section-header,
+	div#shopify-section-footer {
+		display: none;
+	}
+	aside.NewsletterPopup {
+		display: none;
+	}
+	#section-announcement {
+		display: none !important;
+	}
+	#smile-ui-container{
+		display:none !important;
+	}
+</style>

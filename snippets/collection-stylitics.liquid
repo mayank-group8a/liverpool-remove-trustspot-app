@@ -1,0 +1,45 @@
+<script src="https://web-assets.stylitics.com/v3-classic/latest/classic.release.js" ></script>
+<div id="styliticsContainer" style="display: none;">
+  {% comment %}
+  <h4 class="SectionHeader__Heading Heading u-h1 SectionHeader--center">{{  collection.title }} Gallery</h4>
+  {% endcomment %}
+  <div id="stylitics-widget-container"></div>
+</div>
+
+<script>
+  {% if collection.metafields.custom.add_tag != blank %}
+    let widgetInstance = new StyliticsClassicWidget( "liverpool", "stylitics-widget-container", {
+    api: {
+      tags: "{{ collection.metafields.custom.add_tag }}",
+      min: 3,
+      max: 6,
+    },
+  })
+  widgetInstance.on("mount", "bundles", function (data) {
+    console.log('{{ collection.metafields.custom.add_tag }}',data);
+    if (data.bundles && data.bundles.length > 2) {
+      let styliticContainer = document.getElementById("styliticsContainer");
+      styliticContainer.style.display = "block"; 
+      // un-hide styliticContainer after widget has loaded with bundles
+    }
+  })
+  widgetInstance.start();
+  {% else %}
+  let widgetInstance = new StyliticsClassicWidget( "liverpool", "stylitics-widget-container", {
+    api: {
+      tags: "{{  collection.handle | replace: '-', '' }}_gallery",
+      min: 3,
+      max: 6,
+    },
+  })
+  widgetInstance.on("mount", "bundles", function (data) {
+    console.log('{{  collection.handle }}_gallery',data);
+    if (data.bundles && data.bundles.length > 2) {
+      let styliticContainer = document.getElementById("styliticsContainer");
+      styliticContainer.style.display = "block"; 
+      // un-hide styliticContainer after widget has loaded with bundles
+    }
+  })
+  widgetInstance.start();
+  {% endif %}
+</script>

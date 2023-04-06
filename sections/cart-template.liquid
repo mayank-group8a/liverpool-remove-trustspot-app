@@ -1,0 +1,233 @@
+{%- capture section_settings -%}
+{
+  "type": {{ settings.cart_type | json }},
+  "itemCount": {{ cart.item_count }},
+  "drawer": false,
+  "hasShippingEstimator": {% if section.settings.show_shipping_estimator and cart.item_count > 0 %}true{% else %}false{% endif %}
+}
+{%- endcapture -%}
+
+<section data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}'>
+  {%- if cart.item_count == 0 -%}
+  
+    <div class="EmptyState">
+      <div class="Container">
+        <h1 class="EmptyState__Title Heading u-h5">{{ 'cart.general.empty' | t }}</h1>
+
+        {%- if settings.cart_show_free_shipping_threshold -%}
+          {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+          {%- capture remaining_amount -%}<span><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_total" style="display:none !important;"></span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>{%- endcapture -%}
+
+          <p class="Text--subdued">{{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}</p>
+        {%- endif -%}
+
+        <a href="/collections/all" class="EmptyState__Action Button Button--primary">{{ 'cart.general.empty_button' | t }}</a>
+      </div>
+    </div>
+  {%- else -%}
+    <div class="Container">
+      <div class="PageHeader">
+        <div class="SectionHeader SectionHeader--center">
+          <h1 class="SectionHeader__Heading Heading u-h1" id="cartcaption">{{ 'cart.general.title' | t }}</h1>
+
+          {%- if settings.cart_show_free_shipping_threshold -%}
+            {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+
+            <p class="SectionHeader__Description Text--subdued">
+              {%- if cart.total_price >= threshold_in_cents -%}
+                {{- 'cart.general.free_shipping' | t -}}
+              {%- else -%}
+                {%- capture remaining_amount -%}<span><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_total_2" style="display:none !important;"></span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>{%- endcapture -%}
+                {{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+        
+        <!-- Event snippet for Add to Cart - 30 Days with View Through conversion page -->
+<script>
+  gtag('event', 'conversion', {'send_to': 'AW-755634570/HhwfCJm7lpcBEIqjqOgC'});
+</script>
+</div>
+
+      <div class="PageContent">
+        <div id="sca-fg-owl-carousel">
+          <div id="freegift_cart_container" class="sca-fg-cart-container" style="display: none;">
+            <div id="freegift_message" class="owl-carousel"></div>
+          </div> 
+          <div id="sca-fg-slider-cart" style="display: none;">
+            <div class="sca-fg-cart-title">
+              <strong>Select your free gift (s)</strong>
+            </div>
+            <div id="sca_freegift_list" class="owl-carousel"></div>
+          </div>
+        </div>
+        <form action="/cart" method="POST" class="Cart Cart--expanded" novalidate>
+          <input type="hidden" name="attributes[collection_mobile_items_per_row]" value="">
+          <input type="hidden" name="attributes[collection_desktop_items_per_row]" value="">
+
+          {% include 'cart-items' %}
+
+          {%- comment -%} Begin TryNow Widget {%- endcomment -%}
+          <div class="tn-widget tn-widget-main-cart">
+            You can add <span class="tn-widget-remaining"></span> more items to your TryNow order. <strong><a href="/collections/womens-new-arrivals">Keep shopping?</a></strong>
+          </div>
+          {%- comment -%} End TryNow Widget {%- endcomment -%}
+          
+          <div name="sr_headerDiv"></div>
+
+          <footer class="Cart__Footer">
+              <div class="CartItem">
+              <div class="Cart__NoteContainer">
+            {%- if settings.cart_enable_notes -%}
+                <label class="Cart__NoteButton" for="cart-note">{{ 'cart.general.add_note' | t }}</label>
+                <textarea class="Cart__Note Form__Textarea" name="note" id="cart-note" rows="4" placeholder="{{ 'cart.general.note_placeholder' | t }}">{{ cart.note }}</textarea>
+       
+            {%- endif -%}
+            
+
+</div>
+
+            <div class="Cart__Recap">
+              {%- capture shipping_and_taxes_notice -%}{{ 'cart.general.shipping_and_taxes_notice' | t }}{%- endcapture -%}
+              <span class="Cart__Total Heading u-h6">{{ 'cart.general.total' | t }}: <span data-money-convertible><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_total_3" style="display:none !important;"></span>{{ cart.total_price | money_without_trailing_zeros }}</span></span>
+              {%- comment -%} Begin TryNow Due Today {%- endcomment -%}
+              <div class="tn-due-today tn-due-today-main-cart Cart__Total Heading u-h5">
+                <span>Due Today:&nbsp</span>
+                <span>$0</span>
+              </div>
+              {%- comment -%} End TryNow Due Today {%- endcomment -%}
+
+              {%- if shipping_and_taxes_notice != blank -%}
+                <span class="Cart__Taxes Text--subdued">{{ shipping_and_taxes_notice }}</span>
+              {%- endif -%}
+
+              {% if section.settings.cartmsg != blank %}<div class="storefront-cart-msg">{{  section.settings.cartmsg }}</div>{% endif %}
+
+                      <div class="shopify_secure">                        
+            <a href="https://www.shopify.com/pci-compliant?utm_source=secure&amp;utm_medium=shop" title="This online store is secured by Shopify" target="_blank" rel="nofollow"><img src="https://cdn.shopify.com/s/images/badges/shopify-secure-badge-white.svg" alt="Shopify secure badge" /></a>
+          </div>
+              <a href="collections/all" class="Button Button--secondary continue-shopping" >Continue shopping</a>
+              <button onclick="checkevent();" type="submit" id="lpcart__checkout" name="checkout" class="Cart__Checkout Button Button--primary Button--full">{{ 'cart.general.checkout' | t }}</button>
+              {%- comment -%} Begin TryNow Program Details {%- endcomment -%}
+              <div id="tn-info-program" class="tn-info tn-info-program-main-cart">
+                <img class="tn-info-program-logo" src="https://components.trynow.net/images/trynow_logo.svg" alt="TryNow Logo">
+                <p class="tn-info-program-text">free for 7 days. Only pay for what you keep.</p>
+              </div>
+              {%- comment -%} End TryNow Program Details {%- endcomment -%}
+
+              <div id="klarna-on-site-messaging"></div>
+              {%- comment -%}
+              <!-- Start Placement -->
+              <klarna-placement  tabindex="-1" data-id="a1b6ac44-2cb2-421a-9014-a41d329e9a20"   data-purchase_amount="{{ cart.total_price }}"  data-theme="default"></klarna-placement>
+              <!-- end Placement -->
+              {%- endcomment -%}
+    
+              {%- comment -%}
+                {%- if additional_checkout_buttons -%}
+                  <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
+                {%- endif -%}
+              {%- endcomment -%}
+            </div>
+            </div>
+            <div class="CartItem">
+            <div id="checkoutrecs"></div>
+    
+            <div class="pledgeling">
+              <div data-round-up-via-pledgeling="4527013167202"></div>
+              
+              <!-- Put this where you want the element to appear -->
+<div data-round-up-via-pledgeling="6551016079458"></div>
+
+              <!-- Put this where you want the element to appear -->
+<div data-round-up-via-pledgeling="6551020273762"></div>
+              
+              <!-- Put this where you want the element to appear -->
+              <div data-round-up-via-pledgeling="6551503077474"></div>
+	<style>
+      .pledgeling > div > div{z-index: 0;}
+              </style>
+            </div>
+            </div>
+          </footer>
+         
+
+        </form>
+
+        {%- if section.settings.show_shipping_estimator -%}
+          <div class="Section Section--spacingExtraLarge">
+            <div class="Panel">
+              <h2 class="Panel__Title Heading u-h2">{{ 'cart.shipping_estimator.title' | t }}</h2>
+
+              <div class="Panel__Content">
+                <div class="ShippingEstimator">
+                  <div class="ShippingEstimator__Form">
+                    <div class="ShippingEstimator__Country Form__Select Select Select--primary">
+                      {%- include 'icon' with 'select-arrow' -%}
+                      <select name="country" title="{{ 'cart.shipping_estimator.country' | t }}" data-default="{% if customer %}{{ customer.default_address.country }}{% elsif section.settings.shipping_estimator_default_country != '' %}{{ section.settings.shipping_estimator_default_country }}{% endif %}">{{ all_country_option_tags }}</select>
+                    </div>
+
+                    <div class="ShippingEstimator__Province Form__Select Select Select--primary" style="display: none">
+                      {%- include 'icon' with 'select-arrow' -%}
+                      <select name="province" title="{{ 'cart.shipping_estimator.province' | t }}"></select>
+                    </div>
+
+                 
+                    <input type="text" class="ShippingEstimator__Zip Form__Input" name="zip" placeholder="{{ 'cart.shipping_estimator.zip_code' | t }}">
+
+                    <button type="button" class="ShippingEstimator__Submit Button Button--primary">{{ 'cart.shipping_estimator.estimate' | t }}</button>
+                  </div>
+
+                  <div class="ShippingEstimator__Error Alert Alert--error" style="display: none"></div>
+                  <div class="ShippingEstimator__Results">
+                    <div class="ShippingEstimator__ResultsInner"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "class": "shopify-section--bordered",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_shipping_estimator",
+      "label": "Show shipping rates calculator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_estimator_default_country",
+      "label": "Default country to use",
+      "info": "If your customer is logged-in, the country in his default shipping address will be selected.",
+      "default": "United States"
+    },
+    {
+      "type": "header",
+      "content": "Cart note message"
+    },
+    {
+      "type": "richtext",
+      "id": "cartmsg",
+      "default": "<p>In an effort to ship your order as quickly as possible, we cannot change or cancel an order once it is placed. We offer free returns should you need to return an item.</p>",
+      "label": "Cart note"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  function checkevent(){
+    console.log("call checkout button click");
+  	fbq('track', 'InitiateCheckout');
+  }
+
+</script>

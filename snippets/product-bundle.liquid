@@ -1,0 +1,395 @@
+{% if codeType == 'baseHTML' %}
+  <script>
+      window.current={{ product | json }};
+      </script>
+  <div>
+  {%- for tag in product.tags -%}
+      {%- if tag contains 'Color name' -%}
+          {%- assign colorName = tag | remove_first: 'Color name|' -%}
+      {%- endif -%}
+  {%- endfor -%}
+  {%- assign productTitle = product.title | remove: colorName -%}
+  <div class="bundle_propertys">
+      <div class="bundle_Hiddenpropertys" style="display: none">
+          <input id="_master_handle" type="text" name="properties[_master_handle]" value="{{ product.handle }}">
+          <input id="_title" type="text" name="properties[_title]" value="{{- productTitle -}}">
+      </div>
+      <div class="fit-item" style="display: none"></div>
+      <label id="colorLabel" class="ProductForm__Label" style="display: none">Color:</label>
+      <ul class="HorizontalList--spacingTight" id="color"></ul>
+      <label id="patternLabel" class="ProductForm__Label" style="display: none">Pattern:</label>
+      <ul class="HorizontalList--spacingTight" id="pattern"></ul>
+  </div>
+</div>
+{% elsif codeType == script %}
+<style>
+/* product bundle
+.ProductForm__Variants .no-js.ProductForm__Option{display: block !important;}
+*/
+ul#color li, ul#pattern li {text-transform: capitalize;}
+.bundle_propertys .HorizontalList--spacingTight {display: flex;flex-wrap: wrap;}
+.bundle_propertys{margin-bottom: 8px;margin-top:15px;}
+.bundle_propertys .ProductForm__Label {margin-bottom: -8px;text-transform: capitalize;}
+.bundle_propertys .HorizontalList__Item label.colorSwatch {height:35px;width:35px;display:inline-block;position: relative;}
+.bundle_propertys .HorizontalList__Item label[data-tooltip]:before {
+  transform: translateX(-50%,-32%);
+}
+.bundle_propertys .HorizontalList__Item label.colorSwatch:after {
+  content: '';
+  position: absolute;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  top: -4px;
+  left: -4px;
+  border:1px solid #ddd;
+}
+.bundle_propertys .HorizontalList__Item input:checked + label:after{
+  border-color: #000;
+}
+.bundle_propertys .HorizontalList__Item label span.crossed-out {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  opacity: 0.5;
+  display: none;
+}
+.bundle_propertys .HorizontalList__Item label.sold span.crossed-out {
+  display: block;
+}
+.bundle_propertys .HorizontalList__Item label span.crossed-out svg {
+  width: 100%;
+  height: 100%;
+}
+.fit-item .HorizontalList--spacingTight .HorizontalList__Item a { display: inline-block; text-align: center; min-width: 36px; padding: 6px 10px; border: 1px solid #ddd; color: #5b5b5b; cursor: pointer; }
+.fit-item .HorizontalList--spacingTight .HorizontalList__Item.acive a{ border-color: #1c1b1b; color: #1c1b1b; }
+.fit-item {
+  margin-bottom: 12px;
+}
+</style>
+
+<script>
+  var Shopify = Shopify || {};
+  window.inclusive_styles=0;
+  window.products = window.products || {};
+  {% if product.metafields.product-bundles.inclusive_styles %}
+    let currentInclusiveStyle = 'Standard';
+    var productTags = {{ product.tags | json }};
+    $(productTags).each(function (i, tag) {
+      if(tag == 'Plus'){
+          currentInclusiveStyle = 'Plus';
+      } else if(tag == 'Tall') {
+          currentInclusiveStyle = 'Tall';
+      } else if(tag == 'Petite') {
+          currentInclusiveStyle = 'Petite';
+      }
+    });
+
+    var productJson = {{ product.metafields.product-bundles.inclusive_styles }};
+    var bundlePropertys = document.querySelector('.bundle_propertys');
+    itemSwatchHtml = '';
+    for(let metaIteam = 0; metaIteam < productJson.length; metaIteam++){
+      var styleTag = bundlePropertys.querySelectorAll('#'+productJson[metaIteam].name).length;
+      var url = productJson[metaIteam].product_url+'.js';
+      var proAvailability = false;
+      if(styleTag == 0){
+        var swatchindex = `<label id="${productJson[metaIteam].name}Label" class="ProductForm__Label">${productJson[metaIteam].name}: <span class="currentfit" style="display: none">${currentInclusiveStyle}</span></label><ul id="${productJson[metaIteam].name}" class="HorizontalList--spacingTight"></ul></div>`;
+        bundlePropertys.querySelector('.fit-item').innerHTML  += swatchindex;
+      }
+      var currentProduct = `/products/{{ product.handle }}`;
+      fetch(url, { credentials: 'same-origin' }).then(function(response) {return response.json();}).then(function(product) {
+        //console.log('product: ', product.available);
+        var avClass = product.available ? 'available':'sold';
+        var clas = productJson[metaIteam].product_url == currentProduct ? 'acive':'';
+        document.querySelector('#fit').insertAdjacentHTML('beforeend', `<li class="HorizontalList__Item HorizontalList__Item bundle-list-${metaIteam} ${clas} ${avClass}" style="order: ${metaIteam};"><a href="${productJson[metaIteam].product_url}"> ${productJson[metaIteam].value}</a></li>`);
+        document.querySelector('.fit-item').style.display = "block";
+      }).catch(function(error) {console.log(error);});
+    };
+{% endif %}
+
+
+  // ---------------------------------------------------------------------------
+  // Money format handler
+  // ---------------------------------------------------------------------------
+  Shopify.money_format = "${{amount}}";
+  Shopify.formatMoney = function(cents, format) {
+    if (typeof cents == 'string') { cents = cents.replace('.',''); }
+    var value = '';
+    var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+    var formatString = (format || this.money_format);
+  
+    function defaultOption(opt, def) {
+       return (typeof opt == 'undefined' ? def : opt);
+    }
+  
+    function formatWithDelimiters(number, precision, thousands, decimal) {
+      precision = defaultOption(precision, 2);
+      thousands = defaultOption(thousands, ',');
+      decimal   = defaultOption(decimal, '.');
+  
+      if (isNaN(number) || number == null) { return 0; }
+  
+      number = (number/100.0).toFixed(precision);
+  
+      var parts   = number.split('.'),
+          dollars = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands),
+          cents   = parts[1] ? (decimal + parts[1]) : '';
+  
+      return dollars + cents;
+    }
+  
+    switch(formatString.match(placeholderRegex)[1]) {
+      case 'amount':
+        value = formatWithDelimiters(cents, 2);
+        break;
+      case 'amount_no_decimals':
+        value = formatWithDelimiters(cents, 0);
+        break;
+      case 'amount_with_comma_separator':
+        value = formatWithDelimiters(cents, 2, '.', ',');
+        break;
+      case 'amount_no_decimals_with_comma_separator':
+        value = formatWithDelimiters(cents, 0, '.', ',');
+        break;
+    }
+  
+    return formatString.replace(placeholderRegex, value);
+  };
+
+  window.is_bundle=0;
+  window.products = window.products || {};
+
+  {% if product.metafields.product-bundles.bundle %}
+    window.is_bundle = 1;
+    let prod_bund = {{ product.metafields.product-bundles.bundle }};
+    //console.log('prod_bund',prod_bund);
+    Object.keys(prod_bund).forEach(function (element, index) {
+        url = `${prod_bund[element].product_url}` + '.js';
+        url = url.replace('/products/','').replace('products/','');
+        urlAlt = url.replace('.js','?view=bundle_styles');
+        $.ajax({
+          url:urlAlt,
+          type:'GET',
+          cache: false,
+          success: function(dataResponse){
+              //console.log('url',urlAlt);
+              var product = '';
+              if(dataResponse !== ''){
+                var dataEl = $(dataResponse).html();
+                var dataJson = JSON.parse(dataEl);
+                //console.log(dataJson);
+                var product = '';
+                var styles = '';
+                if(dataJson.product !== undefined){
+                  product = dataJson.product;
+                }
+                //console.log(product);
+                if(product !== undefined){
+                  // console.log('ajas product: ',product);
+                  window.products[product.id] = product;
+                  if(dataJson.inclusive_styles !== undefined){
+                    //window.products.inclusive = window.products.inclusive || {};
+                    styles = dataJson.inclusive_styles;
+                    window.products[product.id].inclusive = styles;
+                    //console.log(styles);
+                  }
+                  // "selected_variant_id": {{ selected_variant.id }}
+                  let clas = "div";
+                  checkedEl = '';
+                  masterHandleValu = '';
+                  if (product.id === window.current.id) {
+                      clas = "active-bundle";
+                      checkedEl = 'checked';
+                      checkedEl = 'checked';
+                      masterHandleValu = prod_bund[element].product_url;
+                  }
+                  function convertToSlug(Text) {
+                    return Text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+                  }
+                  var assetUrl = "{{ 'tempimg' | asset_url }}";
+                  var timep = assetUrl.replace('tempimg', convertToSlug(prod_bund[element].color)+ '_16x.png');
+                  var avClass = product.available ? 'available':'sold';
+                  //console.log('avClass: ',avClass);
+                  let html = `<li class="HorizontalList__Item HorizontalList__Item bundle-list-${index + 1} ${clas}" style="order: ${index + 1};"><input id='${product.id}' class="bundleSwatch__Radio ${prod_bund[element].tag.toLowerCase()}Swatch___Radio" type="radio" name="propertiesColor" value="${prod_bund[element].color}" data-option-position="${index + 1}" data-url="${prod_bund[element].product_url}" data-json='${product.id}' ${checkedEl}><label for='${product.id}' class="${prod_bund[element].tag.toLowerCase()}Swatch ${avClass}" style="background-color: ${convertToSlug(prod_bund[element].color)};background-image: url(${timep})" title="${prod_bund[element].color}" data-tooltip="${prod_bund[element].color}" ><span class="crossed-out"><svg data-name="crossed-out" width="25" height="25" viewBox="0 0 25 25"><g id="Rectangle_37" data-name="Rectangle 37" fill="#fff" stroke="#707070" stroke-width="1"><rect width="25" height="25" fill="none" stroke="none"/><rect x="0.5" y="0.5" width="24" height="24" fill="none"/></g><line id="Line_1" data-name="Line 1" x2="24" y2="24" transform="translate(0.5 0.5)" fill="none" stroke="#707070" stroke-width="1"/><line id="Line_2" data-name="Line 2" x1="24" y2="24" transform="translate(0.5 0.5)" fill="none" stroke="#707070" stroke-width="1"/></svg></span></label></li>`;
+                  let click;
+                  document.getElementById("colorLabel").style.display = "none";
+                  document.getElementById("patternLabel").style.display = "none";
+                  var prod_bundTag = prod_bund[element].tag.toLowerCase();
+                  //console.log('prod_bundTag: ',prod_bundTag);
+                  if (prod_bundTag == "color") {
+                    //$(".ProductForm__Option--labelled#option-color").hide();
+                    document.getElementById("option-color").style.display = "none";
+                    document.getElementById("colorLabel").style.display = "block";
+                    document.getElementById("color").insertAdjacentHTML('beforeend', html);
+                    click = document.querySelector("#color .bundle-list-" + `${index + 1} .bundleSwatch__Radio`);
+                  } else {
+                    document.getElementById("patternLabel").style.display = "block";
+                    document.getElementById("pattern").insertAdjacentHTML('beforeend', html);
+                    click = document.querySelector("#pattern .bundle-list-" + `${index + 1} .bundleSwatch__Radio`);
+                  }
+                  var masterHandleValu = masterHandleValu.replace('/products/','');
+                  document.querySelector(".bundle_Hiddenpropertys #_master_handle").value = masterHandleValu;
+                  click.addEventListener('change', function () {
+                      window.history.pushState("", "", this.getAttribute('data-url'));
+                      let pro_json = window.products[this.getAttribute('data-json')];
+                      console.log('that',pro_json);
+                      if (pro_json) {
+                        // varaints update start
+                        var varants = '';
+                        for(let varIndex = 0; varIndex < pro_json.variants.length; varIndex++){
+                            var variant = product.variants[varIndex];
+                            //console.log('<br>variants', variant.available);
+                            if(variant.id== 39634140430402 || variant.id == 39634140463170){
+                                //console.log('variants', variant);
+                            }
+                            // this.hasDriversLicense ? 'a' : 'no'
+                            varants += `<option data-sku="${variant.sku ? variant.sku : ''}" value="${variant.id}" available="${variant.available}">${variant.title} - ${Shopify.formatMoney(variant.price, theme.moneyFormat)}</option>`;
+                        };
+                        //console.log('varants',varants);
+                        document.querySelector('.ProductForm__Option .Select select').innerHTML = varants;
+                        
+                        var thisColor = document.querySelector('.bundle_propertys .HorizontalList__Item .bundleSwatch__Radio:checked').value;
+                        document.querySelector('#option-color .ProductForm__OptionName .ProductForm__SelectedValue').textContent = thisColor;
+                        document.querySelector('.Popover__Content__Color .Popover__Value.is-selected').setAttribute('data-value', thisColor);
+                        document.querySelector('.Popover__Content__Color .Popover__Value.is-selected').textContent = thisColor;
+                        
+                        $('.Popover__Content__Color .Popover__Value.is-selected').trigger('click');
+                        var thisTest = $('.ProductForm__Option .HorizontalList--spacingTight .HorizontalList__Item input:checked').attr('id');
+              
+                        $('#'+thisTest).prop('checked', false);
+                        setTimeout(function () {
+                            $('[for="'+thisTest+'"]').trigger('click');
+                        }, 50);
+                        // varaints update end
+              
+                        document.querySelector(".bundle_Hiddenpropertys #_master_handle").value = this.getAttribute('data-url').replace('/products/','');
+                        window.current = pro_json;
+                        var variantImg = prod_bund[element].variant_img_url; 
+                        if(document.querySelectorAll('.Product__Slideshow a').length > 0) {
+                            var newEl = document.querySelectorAll('.Product__Slideshow a')[0];
+                            newEl.setAttribute('href', variantImg);
+                            newEl.querySelector('img').setAttribute('src', variantImg);
+                            newEl.querySelector('img').setAttribute('data-original-src', variantImg);
+                            newEl.querySelector('img').setAttribute('data-srcset', variantImg);
+                            newEl.querySelector('img').setAttribute('srcset', variantImg);
+                        }
+                        document.querySelectorAll("#color>*").forEach(function (ele) { ele.classList.remove("active-bundle") });
+                        document.querySelectorAll("#pattern>*").forEach(function (ele) { ele.classList.remove("active-bundle") });
+                        this.className = this.className + " active-bundle";
+                        customVariantChange();
+
+                        let currentInclusive = 'Standard';
+                        var productTags = pro_json.tags;
+                        $(productTags).each(function (i, tag) {
+                          if(tag == 'Plus'){
+                              currentInclusive = 'Plus';
+                          } else if(tag == 'Tall') {
+                              currentInclusive = 'Tall';
+                          } else if(tag == 'Petite') {
+                              currentInclusive = 'Petite';
+                          }
+                        });
+
+                        if(pro_json.inclusive !== null){
+                          //console.log('inclusive:',currentInclusive,'\n',pro_json.inclusive);
+                          var inclusiveEl = '';
+                          for(let inclusiveIndex = 0; inclusiveIndex < pro_json.inclusive.length; inclusiveIndex++){
+                            if(inclusiveIndex == 0 && document.querySelectorAll('#fit').length == 1){
+                              document.querySelector('#fit').innerHTML = null;
+                            } else if (document.querySelectorAll('#fit').length == 0){
+                              document.querySelector('.bundle_propertys .fit-item').innerHTML = 
+                              `<label id="${pro_json.inclusive[inclusiveIndex].name}Label" class="ProductForm__Label">${pro_json.inclusive[inclusiveIndex].name}: <span class="currentfit" style="display: none">${currentInclusive}</span></label><ul id="${pro_json.inclusive[inclusiveIndex].name}" class="HorizontalList--spacingTight"></ul></div>`;
+                            }
+                            var inclusiveElI = pro_json.inclusive[inclusiveIndex];
+                            //console.log('inclusiveIndex:',inclusiveIndex);
+                            //console.log(inclusiveElI);
+                            var url = pro_json.inclusive[inclusiveIndex].product_url+'.js';
+                            var proAvailability = false;
+                            var currentProduct = `/products/${pro_json.handle}`;
+                            document.querySelector(".fit-item").style.display = "block";
+                            //console.log('url:',url);
+                            fetch(url, { credentials: 'same-origin' }).then(function(response) {return response.json();}).then(function(product) {
+                              //console.log('product: ', product.available);
+                              var avClass = product.available ? 'available':'sold';
+                              var clas = pro_json.inclusive[inclusiveIndex].product_url == currentProduct ? 'acive':'';
+                              document.querySelector('#fit').insertAdjacentHTML('beforeend', `<li class="HorizontalList__Item HorizontalList__Item bundle-list-${inclusiveIndex} ${clas} ${avClass}" style="order: ${inclusiveIndex};"><a href="${pro_json.inclusive[inclusiveIndex].product_url}"> ${pro_json.inclusive[inclusiveIndex].value}</a></li>`);
+                              document.querySelector('.fit-item').style.display = "block";
+                            }).catch(function(error) {console.log(error);});
+                          }
+                        } else {
+                          //console.log('inclusive: hide ');
+                          document.querySelector(".fit-item").style.display = "none";
+                        }
+                      }
+                      
+                  });
+                }
+              }
+          }
+       });
+    });
+    function customVariantChange() {  
+          let op1=null,op2=null,op3=null;
+          let option_name;
+          let optionsEl = document.querySelectorAll('.ProductForm__Option');
+          Object.keys(window.current.options).forEach(function(element,index){
+              var value = null;
+              var loopIndex1
+              switch(index) {
+              case 0:
+                  option_name=typeof window.current.options[element]!='object' ? window.current.options[element] : window.current.options[element].name;
+                  break;
+              case 1:
+                  option_name=typeof window.current.options[element]!='object' ? window.current.options[element] : window.current.options[element].name;
+                  break;
+              case 2:
+                  option_name=typeof window.current.options[element]!='object' ? window.current.options[element] : window.current.options[element].name;
+                  break;        
+              default:
+              }
+          });
+      }
+  {% endif %}
+</script>
+{% elsif codeType == 'productMetaColors' %}
+{%- if product.metafields.product-bundles.bundle != blank -%}
+<div class="productMetaColors product-{{ product.id }}" data-test="">
+  <script>
+      var productJson = {{ product.metafields.product-bundles.bundle }};
+      itemSwatchHtml = '<div class="ProductItem__ColorSwatchList">';
+      function convertToSlug(Text) {
+          return Text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+      }
+      for(let metaIteam = 0; metaIteam < productJson.length; metaIteam++){
+          var url = productJson[metaIteam].product_url+'.js';
+          var proAvailability = false;
+          fetch(url, { credentials: 'same-origin' }).then(function(response) {return response.json();}).then(function(product) {
+              //console.log('product: ', product.available);
+              if(product.available == false){
+                  $(`[for="section-{{ section.id }}-{{ product.id}}-${metaIteam}"]`).addClass('sold');
+              } else {
+                  $(`[for="section-{{ section.id }}-{{ product.id}}-${metaIteam}"]`).addClass('available');
+              }
+          }).catch(function(error) {console.log(error);});
+          var assetUrl = "{{ 'tempimg' | asset_url }}";
+          var timep = assetUrl.replace('tempimg', convertToSlug(productJson[metaIteam].color)+ '_16x.png');
+          //console.log(timep);
+          itemSwatchHtml += '<div class="ProductItem__ColorSwatchItem">';
+          itemSwatchHtml += `<input class="ColorSwatch__Radio" type="radio" name="section-{{ sectionid }}-{{ product.id}}" id="section-{{ section.id }}-{{ product.id}}-${metaIteam}" value="{{ product.title }}" data-variant-url="{% if collection %}{{ collection.url }}{%endif%}${productJson[metaIteam].product_url}" data-image-id="28048275570786" data-image-url="${productJson[metaIteam].variant_img_url}" data-image-widths="[200,400,600,700,800,900,1000,1200]" data-image-aspect-ratio="0.6521739130434783" aria-hidden="true"> <label class="ColorSwatch ColorSwatch--small"  for="section-{{ section.id }}-{{ product.id}}-${metaIteam}" style="background-color: ${convertToSlug(productJson[metaIteam].color)};background-image: url(${timep})" title="${productJson[metaIteam].color}" data-tooltip="${productJson[metaIteam].color}"><span class="u-visually-hidden">${productJson[metaIteam].color}</span><span class="crossed-out"><svg data-name="crossed-out" width="25" height="25" viewBox="0 0 25 25"><g id="Rectangle_37" data-name="Rectangle 37" fill="#fff" stroke="#707070" stroke-width="1"><rect width="25" height="25" fill="none" stroke="none"/><rect x="0.5" y="0.5" width="24" height="24" fill="none"/></g><line id="Line_1" data-name="Line 1" x2="24" y2="24" transform="translate(0.5 0.5)" fill="none" stroke="#707070" stroke-width="1"/><line id="Line_2" data-name="Line 2" x1="24" y2="24" transform="translate(0.5 0.5)" fill="none" stroke="#707070" stroke-width="1"/></svg></span></label></div>`;
+      };
+      itemSwatchHtml += '</div>';
+      //console.log('itemSwatchHtml: ',itemSwatchHtml);
+      var productMetaColors = document.querySelectorAll('.productMetaColors.product-{{ product.id}}');
+      //console.log('productMetaColors', productMetaColors.length);
+      for (let i = 0; i < productMetaColors.length; i++) productMetaColors[i].innerHTML = itemSwatchHtml;
+      $(".productMetaColors.product-{{ product.id}} input").bind("change", function() {
+          //console.log(this.dataset.imageUrl);
+          $(this).closest('.ProductItem').find('.ProductItem__ImageWrapper:not(.ProductItem__ImageWrapper--withAlternateImage) img').attr('src',this.dataset.imageUrl);
+          //console.log(this.attr('data-image-url'));
+      });
+            
+  </script>
+</div>
+{% endif %}
+{% endif %}

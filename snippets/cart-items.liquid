@@ -1,0 +1,183 @@
+{%- assign for_drawer = true -%}
+
+{%- if template == 'cart' or template == 'cart.ajax' -%}
+  {%- assign for_drawer = false -%}
+{%- endif -%}
+
+<div role="grid" class="Cart__ItemList">
+  {%- unless for_drawer -%}
+    <div role="row" class="Cart__Head hidden-phone">
+      <span role="columnheader" scope="col" class="Cart__HeadItem Heading Text--subdued u-h7">{{ 'cart.items.product' | t }}</span>
+      <span role="columnheader" scope="col" class="Cart__HeadItem"></span>
+      <span role="columnheader" scope="col" class="Cart__HeadItem Heading Text--subdued u-h7" style="text-align: center">{{ 'cart.items.quantity' | t }}</span>
+      <span role="columnheader" scope="col" class="Cart__HeadItem Heading Text--subdued u-h7" style="text-align: right">{{ 'cart.items.total' | t }}</span>
+    </div>
+  {%- endunless -%}
+  
+  
+  {%- for line_item in cart.items -%}
+ 
+  
+    {%- if for_drawer -%}
+      <div class="CartItemWrapper">
+    {%- endif -%}
+
+    <div role="row" class="CartItem" data-variant-id="{{ line_item.variant.id }}" >
+      <div role="gridcell" class="CartItem__ImageWrapper AspectRatio">
+        <div class="AspectRatio" style="--aspect-ratio: {{ line_item.image.aspect_ratio }}">
+          <img class="CartItem__Image" src="{{ line_item.image | img_url: '240x' }}" alt="{{ line_item.product.title }} - {{ line_item.image.alt | escape }}">
+        </div>
+      </div>
+
+      <div role="gridcell" class="CartItem__Info">
+        <h2 class="CartItem__Title Heading">
+          <a href="{{ line_item.url }}">
+            {%- if line_item.properties != empty -%}
+              {%- for property in line_item.properties -%}
+                {% if property.first == '_title'  %}{{property.last }}{% endif %}
+              {% endfor %}
+            {% else %}
+              {{ line_item.product.title }}
+            {% endif %}
+          </a>
+        </h2>
+
+        <div class="CartItem__Meta Heading Text--subdued">
+          {%- unless line_item.product.has_only_default_variant -%}
+            <p class="CartItem__Variant">{{ line_item.variant.title }}
+              {%- if line_item.properties != empty -%}{%- for property in line_item.properties -%}{% if property.first == '_Color'  %} / {{property.last }}{% endif %}{% endfor %}{% endif %}
+            </p>
+          {%- endunless -%}
+
+          {%- if line_item.properties != empty -%}
+            <ul class="CartItem__PropertyList">
+              {%- for property in line_item.properties -%}
+				{%- if property.first.first == '_' -%}{%- continue -%}{%- endif -%}
+                {%- assign first_character_in_key = property.first | truncate: 1, '' -%}
+
+                {%- comment -%} Begin TryNow Property Icon Logic {%- endcomment -%}
+                {%- if property.last == blank or first_character_in_key == '_' or property.first == "tn_enabled" or property.first == "tn_final_sale" -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- comment -%} End TryNow Property Icon Logic {%- endcomment -%}
+
+                <li class="CartItem__Property">{{ property.first }}: {{ property.last }}</li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          <div class="CartItem__PriceList">
+            {%- if line_item.original_price > line_item.price -%}
+              <span class="CartItem__Price Price Price--highlight" data-money-convertible><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_item_price" style="display:none !important;"></span>{{ line_item.price | money_without_trailing_zeros }}</span>
+              <s class="CartItem__OriginalPrice Price Price--compareAt" data-money-convertible>{{ line_item.original_price | money_without_trailing_zeros }}</s>
+            {%- else -%}
+              <span class="CartItem__Price Price" data-money-convertible><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_item_price_2" style="display:none !important;"></span>{{ line_item.price | money_without_trailing_zeros }}</span>
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Begin TryNow Property Icon Logic {%- endcomment -%}
+          {%- if line_item.properties != empty -%}
+            <ul>
+              {%- for property in line_item.properties -%}
+				        {%- if property.first.first == '_' -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- assign first_character_in_key = property.first | truncate: 1, '' -%}
+
+                {%- if property.last == blank or first_character_in_key == '_' -%}
+                  {%- continue -%}
+                {%- endif -%}
+
+                {%- if property.first != "tn_enabled" -%}
+                  {%- continue -%}
+                {%- endif -%}
+
+                {% if property.first == 'tn_enabled' and property.last == 'true' %}
+                  <img class="tn-info-logo tn-side-cart" src="https://components.trynow.net/images/trynow_logo.svg" alt="TryNow Logo">
+                {% endif %}
+
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- comment -%} End TryNow Property Icon Logic {%- endcomment -%}
+          {%- comment -%} Begin TryNow Property Final Sale Icon Logic {%- endcomment -%}
+          {%- if line_item.properties != empty -%}
+            <ul>
+              {%- for property in line_item.properties -%}
+				        {%- if property.first.first == '_' -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- assign first_character_in_key = property.first | truncate: 1, '' -%}
+
+                {%- if property.last == blank or first_character_in_key == '_' -%}
+                  {%- continue -%}
+                {%- endif -%}
+
+                {%- if property.first != "tn_final_sale" -%}
+                  {%- continue -%}
+                {%- endif -%}
+                
+                {% if property.first == 'tn_final_sale' and property.last == 'true' %}
+                  <div class="tn-final-sale">
+                    FINAL SALE -
+                    <br>
+                    NON-REFUNDABLE
+                  </div>
+                {% endif %}
+
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- comment -%} End TryNow Property Final Sale Icon Logic {%- endcomment -%}
+        </div>
+
+        {%- capture item_actions -%}
+          <div role="gridcell" class="CartItem__Actions Heading Text--subdued" style="text-align: center">
+            <div class="CartItem__QuantitySelector">
+              <div class="QuantitySelector">
+                
+                <label class="sr-only" for="quantity">Quantity:</label>
+                {% unless line_item.variant.metafields.secomapp.freegifts %}
+                {%- assign quantity_minus_one = line_item.quantity | minus: 1 -%}
+                <button class="QuantitySelector__Button Link Link--primary" title="{{ 'cart.items.set_quantity' | t: new_quantity: quantity_minus_one }}" data-quantity="{{ quantity_minus_one }}" data-line-id="{{ line_item.key }}" data-action="update-item-quantity" aria-label="Decrease quantity by 1">
+                  {%- include 'icon' with 'minus' -%}
+                </button>
+                {% endunless %}
+
+                <input {% if line_item.variant.metafields.secomapp.freegifts %}readonly{% endif %} type="text" name="updates[]" id="updates_{{ line_item.key }}" class="QuantitySelector__CurrentQuantity" pattern="[0-9]*" data-line-id="{{ line_item.key }}" value="{{ line_item.quantity }}" data-id="{{ line_item.key }}" aria-label="Quantity input">
+
+                {% unless line_item.variant.metafields.secomapp.freegifts %}
+                {%- assign quantity_plus_one = line_item.quantity | plus: 1 -%}
+                <button class="QuantitySelector__Button Link Link--primary" title="{{ 'cart.items.set_quantity' | t: new_quantity: quantity_plus_one }}" data-quantity="{{ quantity_plus_one }}" data-line-id="{{ line_item.key }}" data-action="update-item-quantity" aria-label="Increase quantity by 1">
+                  {%- include 'icon' with 'plus' -%}
+                </button>
+                {% endunless %}
+              </div>
+            </div>
+
+            <button class="CartItem__Remove Link Link--underline Link--underlineShort" data-quantity="0" data-line-id="{{ line_item.key }}" aria-label="{{ 'cart.items.remove' | t }} {{ line_item.product.title }}" data-action="remove-item">{{ 'cart.items.remove' | t }}</button>
+          </div>
+        {%- endcapture -%}
+
+        {{ item_actions }}
+      </div>
+
+      {%- unless for_drawer -%}
+        {{ item_actions }}
+
+        <span role="gridcell" class="CartItem__LinePrice Price Heading Text--subdued u-h7" data-money-convertible style="text-align: right"><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_item_total" style="display:none !important;"></span>{{ line_item.line_price | money_without_trailing_zeros }}</span>
+      {%- endunless -%}
+    </div>
+
+    
+    {%- if for_drawer -%}
+      </div>
+    {%- endif -%}
+
+
+
+
+
+    
+  {%- endfor -%}
+</div>

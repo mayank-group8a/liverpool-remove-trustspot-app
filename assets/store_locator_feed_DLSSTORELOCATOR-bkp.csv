@@ -1,0 +1,85 @@
+title,address1,address2,city,state,zipcode,website,phone,tags,latitude,longitude,Latitude,Longitude,"Accuracy Score","Accuracy Type",Number,Street,"Unit Type","Unit Number",City,State,County,Zip,Country,Source
+"Nauti Pearl","18 STATE ST",,NEWBURYPORT,MA,1950,https://nautipearl.com/,978-572-1518,,,,42.810757,-70.870047,1,rooftop,18,"State St",,,Newburyport,MA,"Essex County",01950,US,"Office of Geographic Information (MassGIS), Commonwealth of Massachusetts, MassIT"
+"BK & Co","983 FARMINGTON AVE",,"WEST HARTFORD",CT,6107,https://bkcostyle.com/,860-232-6225,,,,41.761038,-72.744487,1,range_interpolation,983,"Farmington Ave",,,"West Hartford",CT,"Hartford County",06107,US,"TIGER/Line® dataset from the US Census Bureau"
+"Chou Chou","165-C ROWAYTON AVE",,ROWAYTON," CT",6853,,203-853-2726,,,,41.068062,-73.443738,1,range_interpolation,165,"Rowayton Ave",,,Norwalk,CT,"Fairfield County",06853,US,"TIGER/Line® dataset from the US Census Bureau"
+"The 3 Graces","122 MAIN ST.",,LUDLOW,VT,5149,,203-240-1201,,,,43.395934,-72.698553,1,rooftop,122,"Main St",,,Ludlow,VT,"Windsor County",05149,US,Statewide
+"Sorellina Boutique","25 ORCHARD VIEW DR",,LONDONDERRY,NH,3053,,603-818-8015,,,,42.857662,-71.356102,1,rooftop,25,"Orchard View Dr",,,Londonderry,NH,"Rockingham County",03053,US,Statewide
+"THREE LITTLE BIRDS","131 W CHOCOLATE AVENUE"," SUITE 120",HERSHEY,PA,17003,https://tlbboutique.com/,,,,,40.28429,-76.654121,0.95,range_interpolation,131,"W Chocolate Ave",,,Hershey,PA,"Dauphin County",17033,US,"TIGER/Line® dataset from the US Census Bureau"
+"THE PRETTY PINK ROOSTER","100 BERKELEY CIRCLE",,"BASKING RIDGE",,,,908-955-8484,,,,40.700651,-74.566599,1,rooftop,100,"Berkeley Cir",,,"Basking Ridge",NJ,"Somerset County",07920,US,"NJ Office of Information Technology (NJOIT), Office of Geographic Information Systems (OGIS)"
+"FASHION RESCUE 911","8239 DAMPIER CR",,LIVERPOOL,NY,13090,,315-247-0730,,,,43.170313,-76.235249,1,rooftop,8239,"Dampier Cir",,,Liverpool,NY,"Onondaga County",13090,US,"NYS GIS Program Office, State Geographic Information Officer (GIO)"
+"THE BIRD CAGE BOUTIQUE","4706 B STARKEY RD",,ROANOKE,VA,24018,,540-556-2421,,,,37.250349,-80.05251,0.33,place,,,,,Roanoke,VA,"Roanoke County",24018,US,"TIGER/Line® dataset from the US Census Bureau"
+"LEMON CABANA","319 LASKIN RD.",,"VIRGINA BEACH",VA,23451,,757-417-7375,,,,36.85877,-75.980222,1,rooftop,319,"Laskin Rd",,,"Virginia Beach",VA,"Virginia Beach city",23451,US,"Virginia Beach"
+EL'LAY,"11626 N DALE MABRY HWY",,TAMPA,FL,33618,,757-417-7375,,,,28.054425,-82.504816,1,rooftop,11626,"N Dale Mabry Hwy",,,Tampa,FL,"Hillsborough County",33618,US,Hillsborough
+"BACKCOUNTRY BOUTIQUE","1000 N 2ND ST","SUITE 101",MCCALL," ID",83638,,907-388-2154,,,,44.906954,-116.099101,0.6,street_center,,"2nd St",,,McCall,ID,"Valley County",83638,US,"TIGER/Line® dataset from the US Census Bureau"
+"BOARDWALK BOUTIQUE","210 E. SHERMAN AVE."," STE# 111","COEUR D ALENE",ID,83814,,208-667-4665,,,,47.673153,-116.783321,1,rooftop,210,"E Sherman Ave",,,"Coeur D Alene",ID,"Kootenai County",83814,US,Kootenai
+"LULU'S BOUTIQUE","150 NW MINNESOTA AVE",,BEND,OR,97703,,541-617-8948,,,,44.058422,-121.31363,0.9,range_interpolation,150,"NW Minnesota Ave",,,Bend,OR,"Deschutes County",97703,US,"TIGER/Line® dataset from the US Census Bureau"
+"VILLAGE THREADS","57100 BEAVER DR","BUILDING 21 #130",SUNRIVER,"OR ",97707,,,,,,43.87364,-121.436494,1,rooftop,57100,"Beaver Dr",,,Bend,OR,"Deschutes County",97707,US,Deschutes
+"TIDES OF ANACORTES","804 COMMERCIAL AVE",,ANACORTES,WA,98221,,360-929-9255,,,,48.515604,-122.613063,1,rooftop,804,"Commercial Ave",,,Anacortes,WA,"Skagit County",98221,US,Skagit
+"BELLES & BEAUS",,,,,,,,,,,0,0,0,,,,,,,,,,,
+"CRICKET CLOTHING CO.","2814 2ND AVE. N",,BILLINGS,MT,59101,,406-259-3624,,,,45.78236,-108.507068,1,rooftop,2814,"2nd Ave N",,,Billings,MT,"Yellowstone County",59101,US,Yellowstone
+EMAGINARY,"255 GOLD RIVERS CT ",#160,BASALT,CO,81621,,970-927-9645,,,,39.367794,-107.034817,1,rooftop,255,"Gold Rivers Ct",,,Basalt,CO,"Eagle County",81621,US,Pitkin
+"JONAH & SAGE","240 EAST MAIN STREET",,BOZEMAN,MT,59715,,406-404-1199,,,,45.679037,-111.032852,1,rooftop,240,"E Main St",,,Bozeman,MT,"Gallatin County",59715,US,"Montana State Library"
+NEECEES,"1027 SHILOH CROSSING BLVD","SUITE 1",BILLINGS,MT,59102,,,,,,45.749998,-108.613524,1,rooftop,1027,"Shiloh Crossing Blvd",,,Billings,MT,"Yellowstone County",59102,US,"Montana State Library"
+"SOLE MATES","211 S GILLETTE AVE",,GILLETTE,WY,82716,,307-689-9485,,,,44.29274,-105.503803,1,rooftop,211,"S Gillette Ave",,,Gillette,WY,"Campbell County",82716,US,"City of Gillette"
+"STEAMBOAT DRY GOODS","136 STEWART LOOP",,BOZEMAN,MT,59718,,406-525-3288,,,,45.723449,-111.186226,1,rooftop,136,"Stewart Loop",,,Bozeman,MT,"Gallatin County",59718,US,Gallatin
+"WATER FROM THE MOON","118 SOUTH 500 WEST",,HEBER,UT,84032,,435-654-2267,,,,40.506178,-111.422359,1,rooftop,118,"S 500 W",,,"Heber City",UT,"Wasatch County",84032,US,"Utah AGRC (and individual UT counties)"
+"WHAT TO WEAR ROCKY MOUNTAIN","2714 NORTH GATE BLVD",,"COLORADO SPRINGS",CO,80921,,719-488-5980,,,,39.029559,-104.780005,1,rooftop,2714,"N Gate Blvd",,,"Colorado Springs",CO,"El Paso County",80921,US,Statewide
+"CLOTH & STONE BOUTIQUE","1625 DARBY DRIVE",,FLORENCE,AL,35630,,,,,,34.820296,-87.656596,1,range_interpolation,1625,"Darby Dr",,,Florence,AL,"Lauderdale County",35630,US,"TIGER/Line® dataset from the US Census Bureau"
+"HOUSE TO HOME CREATIONS","4746 HANSEN ROAD",,PADUCAH,KY,42001,,270-594-5904,,,,37.066126,-88.693215,1,range_interpolation,4746,"Hansen Rd",,,Paducah,KY,"McCracken County",42001,US,"TIGER/Line® dataset from the US Census Bureau"
+MAM'SELLE,"1348 UNION UNIVERSITY DRIVE","SUITE A",JACKSON,TN,38305,,731-668-2420,,,,35.684396,-88.862794,0.88,nearest_rooftop_match,1340,"Union University Dr",,,Jackson,TN,"Madison County",38305,US,Statewide
+"OLIVE YOU BOUTIQUE","118 MERIDIAN WAY SUITE I",,RICHMOND,KY,40475,,859-625-1328,,,,37.734676,-84.335281,1,rooftop,118,"Meridian Way",Ste,I,Richmond,KY,"Madison County",40475,US,Madison
+"SERENDIPITY BTQ","3124 HEIGHTS VILLAGE",,VESTAVIA,AL,35243,,205-970-2398,,,,33.445932,-86.750203,0.22,place,,,,,Birmingham,AL,"Jefferson County",35243,US,"TIGER/Line® dataset from the US Census Bureau"
+"The French shoppe","6049 HIGHWAY 100",,Nashville," TN",37205,,,,,,36.097915,-86.872351,1,range_interpolation,6049,"Hwy 100",,,Nashville,TN,"Davidson County",37205,US,"TIGER/Line® dataset from the US Census Bureau"
+"ALLIE HARPER","50 AVIATOR PLAZA","UNIT 104","ST. SIMONS ISLAND",GA,31522,,251-709-8382,,,,31.154957,-81.385622,1,rooftop,50,"Aviator Plz",,,"Saint Simons Island",GA,"Glynn County",31522,US,Glynn
+"ARROW TREE BOUTIQUE","415-A BROOKS STREET",,"WAKE FOREST",NC,27587,,984-235-0447,,,,35.974196,-78.508761,1,rooftop,415,"Brooks St",,,"Wake Forest",NC,"Wake County",27587,US,Wake
+"BELLA COTN","236 HWY. 107 N.",,"CASHIERS ",NC,28717,,828-743-9593,,,,35.115862,-83.103141,1,rooftop,236,"Hwy 107 N",,,Cashiers,NC,"Jackson County",28717,US,Jackson
+CLASSIC-COUTURE,"109 E. RUTHERFORD ST.",,LANDRUM,SC,29356,,,,,,35.175314,-82.188178,1,rooftop,109,"E Rutherford St",,,Landrum,SC,"Spartanburg County",29356,US,"Spartanburg County G"
+"FRESH PRODUCE","1 NORTH FOREST BEACH RD","SUITE A6","HILTON HEAD ISLAND",SC,29926,,843-842-3410,,,,32.143616,-80.749827,1,rooftop,1,"N Forest Beach Dr",,,"Hilton Head Island",SC,"Beaufort County",29928,US,"Hilton Head Island"
+"HIGH COUNTRY STYLE","121 N. MAIN ST",,WAYNESVILLE,NC,28786,,828-452-3611,,,,35.491363,-82.987408,1,rooftop,121,"N Main St",,,Waynesville,NC,"Haywood County",28786,US,Haywood
+"THE MARKET PLACE","120 E. MEADOW STREET",,VIDALIA,GA,30474,,912-293-3512,,,,32.218018,-82.412103,0.9,nearest_rooftop_match,118,"E Meadows St",,,Vidalia,GA,"Toombs County",30474,US,Toombs
+"PINK STABLE","1032 BROAD ST",,CAMDEN,SC,29020,,,,,,34.245247,-80.606814,1,range_interpolation,1032,"Broad St",,,Camden,SC,"Kershaw County",29020,US,"TIGER/Line® dataset from the US Census Bureau"
+"SIMPLY STERLING & CO","5275 ROBINHOOD VILLAGE DR.",,"WINSTON SALEM",NC,27106,,336-896-0077,,,,36.122577,-80.366899,1,rooftop,5275,"Robinhood Village Dr",,,"Winston Salem",NC,"Forsyth County",27106,US,Forsyth
+"STYLE FINDER","4421 SIX FORKS RD."," SUITE #104",RALEIGH,NC,27609,,,,,,35.840181,-78.643502,1,rooftop,4421,"6 Forks Rd",,,Raleigh,NC,"Wake County",27609,US,Wake
+"ALEXANDRITE ACTIVE & GOLF WEAR","78100 MAIN ST","SUITE 103","LA QUINTA",CA,92253,,760-625-1364,,,,33.677866,-116.302083,1,rooftop,78100,"Main St",,,"La Quinta",CA,"Riverside County",92253,US,Riverside
+"AMBIANCE GALLERY","262 MAIN STREET",,PLACERVILLE,CA,95667,,831-588-3247,,,,38.728014,-120.803168,1,range_interpolation,262,"Main St",,,Placerville,CA,"El Dorado County",95667,US,"TIGER/Line® dataset from the US Census Bureau"
+BLONDIES,"155 EL CAMINO REAL",,TUSTIN,CA,92780,,714-838-0331,,,,33.744854,-117.823282,1,rooftop,155,"El Camino Real",,,Tustin,CA,"Orange County",92780,US,Orange
+"BLOOM AT AMBIANCE","6608 FOLSOM AUBURN RD ",#8,FOLSOM,CA,95630,,916-936-4471,,,,38.68625,-121.178475,1,range_interpolation,6608,"Folsom Auburn Rd",,,Folsom,CA,"Sacramento County",95630,US,"TIGER/Line® dataset from the US Census Bureau"
+"BE BOUTIQUE","1501 INDIA ST",#120,"SAN DIEGO",CA,92101,,,,,,32.721425,-117.167989,1,rooftop,1501,"India St",,,"San Diego",CA,"San Diego County",92101,US,"San Diego Geographic Information Source - JPA"
+"CAMBRIC LTD","197 2ND ST",,"LOS ALTOS",CA,94022,,650-941-2106,,,,37.378462,-122.116586,1,range_interpolation,197,"2nd St",,,"Los Altos",CA,"Santa Clara County",94022,US,"TIGER/Line® dataset from the US Census Bureau"
+"DEASEE'S BOUTIQUE","115 WEST OCEAN AVE",,LOMPOC,CA,93436,,805-430-8396,,,,34.639177,-120.458338,1,range_interpolation,115,"W Ocean Ave",,,Lompoc,CA,"Santa Barbara County",93436,US,"TIGER/Line® dataset from the US Census Bureau"
+"ESSENZA BOUTIQUE","8711 E PINNACLE PEAK ROAD ","PMB 193",SCOTTSDALE,AZ,85255,,480-563-9963,,,,33.69789,-111.892772,1,rooftop,8711,"E Pinnacle Peak Rd",,,Scottsdale,AZ,"Maricopa County",85255,US,Maricopa
+"FOR ELYSE","228 BROADWAY ST",,CHICO,CA,95928,,530-893-0106,,,,39.729244,-121.841084,1,rooftop,228,"Broadway St",,,Chico,CA,"Butte County",95928,US,Butte
+DAISIES,"1347 PARK ST",,ALAMEDA,CA,94501,,510-522-6443,,,,37.763754,-122.243429,1,rooftop,1347,"Park St",,,Alameda,CA,"Alameda County",94501,US,Alameda
+"KISMET BOUTQUE","100 N SANTA CRUZL AVE ","STE #A","LOS GATOS",CA,95030,,408-395-4664,,,,37.22439,-121.982705,1,rooftop,100,"N Santa Cruz Ave",,,"Los Gatos",CA,"Santa Clara County",95030,US,"Santa Clara"
+"POPPY - SOPHIA BOUTIQUE","911 EMBARCADERO",,"MORRO BAY",CA,93442,,805-771-9750,,,,35.367126,-120.853898,1,rooftop,911,"Embarcadero Pl",,,"Morro Bay",CA,"San Luis Obispo County",93442,US,"San Luis Obispo"
+"TRE BOUTIQUE","2690 VIA DE LA VALLE ","SUITE D240","DEL MAR",CA,92014,,858-755-0511,,,,32.981202,-117.25043,1,rooftop,2690,"Via De La Valle",,,"Del Mar",CA,"San Diego County",92014,US,"San Diego Geographic Information Source - JPA"
+"UNIQUE BOUTIQUE FOR U","34 MAIN STREET",,"SUTTER CREEK",CA,95685,,209-267-1806,,,,38.392828,-120.802574,1,rooftop,34,"Main St",,,"Sutter Creek",CA,"Amador County",95685,US,Amador
+"6TH & BROADWAY","528 BROADWAY ST",,ALEXANDRIA,MN,56308,,,,,,45.886075,-95.377897,1,rooftop,528,"Broadway St",,,Alexandria,MN,"Douglas County",56308,US,Douglas
+"AMORE & FEDE","226 WATER ST"," ",EXCEISIOR,MN,55331,,952-401-3392,,,,44.903217,-93.566898,1,rooftop,226,"Water St",,,Excelsior,MN,"Hennepin County",55331,US,Hennepin
+"BACKWARDS BOUTIQUE","16830 K TRL"," ",PERRY,IA,50220,,515-371-2530,,,,41.797347,-94.09749,1,rooftop,16830,"K Trl",,,Perry,IA,"Dallas County",50220,US,Dallas
+"BLACKSMITH CLOTHING CO.","7806 HORSESHOE BAY RD"," ","EGG HARBOR",WI,54209,,920-868-3216,,,,45.048786,-87.280452,1,rooftop,7806,"Horseshoe Bay Rd",,,"Egg Harbor",WI,"Door County",54209,US,Door
+"CHRISTOPHER'S BOUTIQUE","121 S COURT ST."," ",CIRCLEVILLE,OH,43113,,740-474-7916,,,,39.601235,-82.945624,1,rooftop,121,"S Court St",,,Circleville,OH,"Pickaway County",43113,US,Pickaway
+FABTIQUE,"1657 WEST LANE AVE"," ",COLUMBUS,OH,43221,,614-754-8472,,,,40.006767,-83.054642,1,rooftop,1657,"W Lane Ave",,,Columbus,OH,"Franklin County",43221,US,"City of Columbus"
+FAYE'S,"18900 W BLUEMOUND RD"," ",BROOKFIELD,WI,53045,,262-241-8386,,,,43.037862,-88.148212,1,rooftop,18900,"W Bluemound Rd",,,Brookfield,WI,"Waukesha County",53045,US,Statewide
+"JB AND ME","36 W. 8TH ST","FLOOR 2 SUITE 100",HOLLAND,MI,49423,,616-392-8902,,,,42.790157,-86.108507,1,range_interpolation,36,"W 8th St",,,Holland,MI,"Ottawa County",49423,US,"TIGER/Line® dataset from the US Census Bureau"
+"JEANS AND CUTE TOP","5116 MAIN ST"," ","DOWNERS GROVE",IL,60515,,630-715-9372,,,,41.794341,-88.010735,1,rooftop,5116,"Main St",,,"Downers Grove",IL,"DuPage County",60515,US,Dupage
+"LILLIANS OF APPLETON","115 E COLLEGE AVE"," ",APPLETON,WI,54911,,920-277-5719,,,,44.261634,-88.405217,1,rooftop,115,"E College Ave",,,Appleton,WI,"Outagamie County",54911,US,Outagamie
+"LIZZY'S BOUTIQUE","119 S RAILROAD ST"," ","EAGLE RIVER",WI,54521,,,,,,45.91594,-89.252034,1,rooftop,119,"S Railroad St",,,"Eagle River",WI,"Vilas County",54521,US,Vilas
+"MAIN STREET BOUTIQUE","201 MAIN AVE"," ",RUGBY,ND,58368,,701-412-1033,,,,48.368544,-99.996106,0.9,range_interpolation,201,"S Main Ave",,,Rugby,ND,"Pierce County",58368,US,"TIGER/Line® dataset from the US Census Bureau"
+"NORTHERN ROOTS BOUTIQUE","2550 S. COLUMBIA RD.","SUITE H","GRAND FORKS",ND,58201,,701-757-4277,,,,47.894767,-97.067933,1,rooftop,2550,"S Columbia Rd",,,"Grand Forks",ND,"Grand Forks County",58201,US,"City of Grand Forks"
+"PURPLE POPPY","5800 MERLE HAY RD","SUITE #5",JOHNSTON,IA,50131,,515-975-4833,,,,41.666295,-93.698984,1,rooftop,5800,"Merle Hay Rd",,,Johnston,IA,"Polk County",50131,US,Polk
+"STYLE NICHE BOUTIQUE","2930 146TH STREET W","SUITE 111",ROSEMOUNT,MN,55068,,952-237-7491,,,,44.737242,-93.124955,1,rooftop,2930,"146th St W",,,Rosemount,MN,"Dakota County",55068,US,Dakota
+"TRU BLUE BOUTIQUE","201 N RIVERSIDE","SUITE C4","ST. CLAIR",MI,48079,,810-423-8325,,,,42.825518,-82.486185,1,rooftop,201,"N Riverside Ave",,,"Saint Clair",MI,"St. Clair County",48079,US,Semcog
+V2V,"415 N. FIFTH AVE"," ","ANN ARBOR",MI,48104,,734-665-9110,,,,42.284611,-83.746207,1,rooftop,415,"N 5th Ave",,,"Ann Arbor",MI,"Washtenaw County",48104,US,Washtenaw
+CELESTE,"140 SOUTH MAIN ST",,BOERNE,TX,78006,,830-249-9660,,,,29.793327,-98.731616,1,rooftop,140,"S Main St",,,Boerne,TX,"Kendall County",78006,US,"Statewide Partial"
+"DONNAS FASHION","10051 S YALE AVE",#105,TULSA,OK,74137,,918-299-6565,,,,36.018025,-95.921277,1,rooftop,10051,"S Yale Ave E",,,Tulsa,OK,"Tulsa County",74137,US,Tulsa
+"HAZEL'S HAVEN","4120 ROGERS AVE ","SUITE 102","FORT SMITH",AR,72903,,479-242-4295,,,,35.368912,-94.386356,1,rooftop,4120,"Rogers Ave",,,"Fort Smith",AR,"Sebastian County",72903,US,"Arkansas Geographic Information Office"
+"KATHY'S BOUTIQUE","122 N PALESTINE ST",,ATHENS,TX,75751,,903-677-5448,,,,32.205021,-95.853557,1,rooftop,122,"N Palestine St",,,Athens,TX,"Henderson County",75751,US,Henderson
+"K.LANES (FAB)","600 S. TYLER ","STE W-104",WICHITA,KS,67209,,316-558-8840,,,,37.673422,-97.442833,1,rooftop,600,"S Tyler Rd",,,Wichita,KS,"Sedgwick County",67209,US,"City of Wichita"
+"PANACHE APPAREL & ACCESSORIES INC.","9364 THREE RIVERS RD. STE A",,GULFPORT,MS,39503,,228-822-0120,,,,30.423157,-89.087215,1,rooftop,9364,"3 Rivers Rd",Ste,A,Gulfport,MS,"Harrison County",39503,US,"City of Gulfport"
+"THE 308 BOUTIQUE","320 WEST AVENUE",,HOLDREGE,NE,68949,,308-293-5366,,,,40.437144,-99.371165,1,range_interpolation,320,"W Ave",,,Holdrege,NE,"Phelps County",68949,US,"TIGER/Line® dataset from the US Census Bureau"
+"VESTA'S BOUTIQUE","11525 CANTRELL RD"," #303","LITTLE ROCK",AR,72212,,501-375-1777,,,,34.792765,-92.402839,1,rooftop,11525,"Cantrell Rd",,,"Little Rock",AR,"Pulaski County",72212,US,Pulaski
+"VOGUE BOUTIQUE","144 SOUTH MAIN STREET",,"CARL JUNCTION",MO,64834,,417-649-7911,,,,37.17599,-94.565117,1,rooftop,144,"S Main St",,,"Carl Junction",MO,"Jasper County",64834,US,Jasper
+"CT WEEKENDS ","437 DANIELS STREET","CAMERON VILLAGE",RALEIGH,NC,27605,,,,,,35.790018,-78.661576,1,rooftop,437,"Daniels St",,,Raleigh,NC,"Wake County",27605,US,Wake
+JUDEES,"1205 E. UNIVERSITY DR. ",,GRANGER,IL,46530,,219-324-6443,,,,41.721014,-86.165389,0.8,rooftop,1205,"University Dr",,,Granger,IN,"St. Joseph County",46530,US,"St Joseph"
+"THE 308 BOUTIQUE","725 N. 210","SUITE 130",ELKHORN,NE,68022,,,,,,41.266199,-96.243557,1,rooftop,725,"N 210th St",,,Elkhorn,NE,"Douglas County",68022,US,Douglas

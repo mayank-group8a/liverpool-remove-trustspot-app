@@ -1,0 +1,65 @@
+{%- comment -%}
+    BouncePilot Data Liquid Script
+{%- endcomment -%}
+<script type="text/javascript">
+    window._bopiq = window._bopiq || [];
+    window._bopiq.push(["setAdvertiserId", 'a90bf1cd-0673-4fc6-bcd6-7237b5ff15b5']);
+    window._bopify_secure_url = "{{ shop.secure_url }}";
+    window._bopify_page_description = "{{ page_description }}";
+    window._bopify_cart = {{ cart | json }};
+    window._bopify_checkout = {{ checkout | json }};
+    window._bopify_collection = {{ collection | json }};
+
+    window._bopify_thumbnails = [];
+  
+    {% if collection %}
+        window._bopify_collection_products = {{collections[collection.handle].products | json }};        
+        {% for item in collection.products %}
+             window._bopify_thumbnails['{{ item.id }}'] = {{ item.featured_image.src | img_url: '250x'  | json }};            
+         {% endfor %}             
+        if(typeof window._bopify_collection_products !== 'undefined' && 
+            window._bopify_collection_products !== null){
+        
+            window._bopify_collection_products.forEach(function(item, index){       
+                window._bopify_collection_products[index].featured_image = window._bopify_thumbnails[item.id];
+            });     
+        }      
+    {% endif %}
+    
+    window._bopify_product = {{ product | json }};
+
+    {% if product %}
+      window._bopify_product.featured_image = {{ product.featured_image.src | img_url: '250x'  | json }};      
+    {% endif %}
+
+    {% if cart %}   
+        {% for item in cart.items %}        
+            window._bopify_thumbnails['{{ item.product_id }}'] = {{ item.image.src | img_url: '250x'  | json }};            
+        {% endfor %}
+                                    
+        if(typeof window._bopify_cart !== 'undefined' && 
+             window._bopify_cart !== null && 
+            typeof window._bopify_cart.items !== 'undefined' &&
+            window._bopify_cart.items.length > 0){
+        
+                window._bopify_cart.items.forEach(function(item, index){          
+                    window._bopify_cart.items[index].image = window._bopify_thumbnails[item.product_id];
+                });
+            
+        }
+      
+    {% endif %}
+    
+    {%- if customer and customer.email -%}
+    window._bopify_customer = {
+        "name" : {{customer.name | json }},
+        "id" : {{customer.id | json }},
+        "addresses": {{ customer.addresses | json }},
+        "defaultAddress": {{ customer.default_address | json }},
+        "email" : {{customer.email | json}},
+        "emailHash" : {{ customer.email | strip | lowercase | md5 | json }}
+    };
+    {% endif %}    
+</script>
+<script src="//static.bouncepilot.com/bopi.js" async></script>
+<script src="//static.bouncepilot.com/shopify/bopify.js" async></script>

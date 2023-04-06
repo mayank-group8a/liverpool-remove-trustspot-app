@@ -1,0 +1,114 @@
+<div class="Container">
+  <div class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1">{{ page.title }}</h1>
+    </div>
+  </div>
+  <div class="PageContent PageContent--narrow Rte">
+    {{ page.content }}
+  </div>
+ 
+{% if page.handle == 'returns' %}
+ 
+  {{ 'bootstrap.min.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'popper.min.js' | asset_url }}"></script>
+  <script src="{{ 'bootstrap.min.js' | asset_url }}"></script>
+  <script src="{{ 'bootstrap-popover-custom-class.js' | asset_url }}"></script>
+  <script>
+    $('.js-btn-popover').popover({ 
+      html : true, 
+      content: function() {
+        return $('#lookup-help').html();
+      }
+    });
+    $("#rs_order_number").on('keyup keypress blur change', function(e) {
+      var order_number = $("#rs_order_number").val();
+      if(order_number != ''){
+      	$("#return_a_track_btn").removeAttr("disabled");
+      }else{
+     	$("#return_a_track_btn").prop("disabled", true);
+      }
+    });
+    function track_return(){ 
+        $("#return_a_track_btn").addClass("loading");
+        $("#order_number_error").text("");
+        $("#return_response").html("");
+        console.log("call");
+      	var order_number = $("#rs_order_number").val();
+        console.log(order_number);
+        if(order_number != ''){
+            $.ajax({
+              url: 'https://api.loopreturns.com/api/v1/warehouse/return/details?order_name='+order_number,
+              type: 'GET',
+              dataType: 'json', 
+              headers: {
+                'Accept': 'application/json',
+                'X-Authorization': 'dab935f04e63abae6590814fec7a7af7d68e72de'
+              },
+              contentType: 'application/json; charset=utf-8',
+              success: function (result) {
+                console.log(result);
+                if(typeof result.errors != 'undefined' && result.errors != ''){
+                  var error_message 	= '<span class="no_record">'+result.errors.message+'</span>';
+                  $("#return_response").html("");
+                  $("#return_response").html(error_message);
+                  $("#return_a_track_btn").removeClass("loading");
+                }else{ 
+                  var retrun_status_data = '';
+                  if(typeof result[0].label_status != 'undefined'){
+                    var loop_status = result[0].label_status;
+                    loop_status = loop_status.replace("_", "-");
+                    loop_status = loop_status.replace("_", "-");
+                    loop_status = loop_status.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                        return letter.toUpperCase();
+                    });
+                    retrun_status_data += '<span class="return_status">Return/Refund Status: <span class='+result[0].label_status+'>'+loop_status+'</sapn></span>';
+                  } 
+                  if(typeof result[0].label_updated_at != 'undefined' && typeof result[0].label_status != 'undefined' && result[0].label_status == 'delivered'){
+                    var return_date = new Date(result[0].label_updated_at);
+                    return_date.setDate(return_date.getDate() + 7);
+                    var d = return_date.getDate();
+                    var m = return_date.getMonth();
+                    var y = return_date.getFullYear();
+                    var final_return_date = m +"/"+d+"/"+y;
+                    retrun_status_data += '<span class="return_date">Your refund will be processed by '+final_return_date+'.</span>';
+                  }else if(typeof result[0].label_status != 'undefined' ){
+                    if(result[0].label_status == 'in_transit'){
+                        var delivered_date = new Date(result[0].label_updated_at);
+                        delivered_date.setDate(delivered_date.getDate() + 7);
+                        var d = delivered_date.getDate();
+                        var m = delivered_date.getMonth();
+                        var y = delivered_date.getFullYear();
+                        var final_delivered_date = m +"/"+d+"/"+y;
+                        console.log(delivered_date)
+                      	var return_date = new Date(delivered_date);
+                        return_date.setDate(return_date.getDate() + 7);
+                        var d = return_date.getDate();
+                        var m = return_date.getMonth();
+                        var y = return_date.getFullYear();
+                        var final_return_date = m +"/"+d+"/"+y;
+                   		retrun_status_data += '<span class="return_date">Expected to reach at the warehouse by '+final_delivered_date+'. Once your return is received back at the warehouse, it will be refunded by '+final_return_date+'.</span>';
+                    }else{
+                   		retrun_status_data += '<span class="return_date">Once your return is received back at the warehouse, it will be refunded within 7 days.</span>';
+                    }
+                  }
+                  $("#return_response").html("");
+                  $("#return_response").html(retrun_status_data);
+                  $("#return_a_track_btn").removeClass("loading");
+                }
+              }, 
+              error: function (error) {
+                console.log(error);
+                var error_message = '<span class="no_record">'+error+'</span>';
+                $("#return_response").html("");
+                $("#return_response").html(error_message);
+                $("#return_a_track_btn").removeClass("loading");
+              }
+           });
+        }else{
+          $("#rs_order_number").focus();
+          $("#order_number_error").text("Please enter order number.");
+        }
+    }
+  </script>
+{% endif %}   

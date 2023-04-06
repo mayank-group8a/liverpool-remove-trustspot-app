@@ -1,0 +1,79 @@
+{
+  "sections": {
+    "product-template": {
+      "type": "product-template",
+      "blocks": {
+        "b2636462-8a84-4d37-89f6-c7d565a981ed": {
+          "type": "collapsible_description",
+          "settings": {
+            "heading": "Description"
+          }
+        },
+        "4ce9f9aa-95c5-463d-8590-fb08b31acf6b": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Composition",
+            "content": "<p>{{ product.metafields.description.composition_care | metafield_tag }}<\/p>",
+            "page": ""
+          }
+        },
+        "00498e4d-e165-44c2-af7b-60401bc08f0b": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care",
+            "content": "<p>{{ product.metafields.description.care | metafield_tag }}<\/p>",
+            "page": ""
+          }
+        },
+        "8a0b7aa9-0d0b-4161-ace5-060aff573d40": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "SHIPPING & RETURNS",
+            "content": "<p>We offer ground shipping for <em><strong>$8<\/strong><\/em> on orders $99.99 & under and <em><strong>FREE<\/strong><\/em> ground shipping on orders $100 or more (<em><strong>US only except HI\/AK\/PR\/VI<\/strong><\/em>). We offer expedited 2-Day shipping for $12 through UPS.<\/p><p><em>Returns are always <\/em><em><strong>FREE! <\/strong><\/em><em>All merchandise must be returned within 30 days of receipt with all LIVERPOOL tags attached. Merchandise marked as <\/em><em><strong>FINAL SALE <\/strong><\/em><em>cannot be returned or exchanged.<\/em><\/p><p><em>HOLIDAY RETURN POLICY: We have extended our 30-day return policy to allow more flexibility in purchasing holiday gifts. Purchases made between November 1st - December 31st, 2022, that meet the return requirements, may be returned through January 31st, 2023.<\/em><\/p><p>Ground Shipping: 6-10 Business Days Total Delivery Time<\/p><p>2-Day Shipping: 3-4 Days Total Delivery Time<\/p><p><em>We are currently unable to ship to P.O. Boxes, Hawaii, Alaska, Puerto Rico, US Virgin Islands, Canada, Australia, New Zealand, and Europe<\/em><\/p><p>For more information visit our <a href=\"\/pages\/returns\" target=\"_blank\" title=\"RETURNS + EXCHANGES\">Returns + Exchanges<\/a> page.<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "b2636462-8a84-4d37-89f6-c7d565a981ed",
+        "4ce9f9aa-95c5-463d-8590-fb08b31acf6b",
+        "00498e4d-e165-44c2-af7b-60401bc08f0b",
+        "8a0b7aa9-0d0b-4161-ace5-060aff573d40"
+      ],
+      "settings": {
+        "show_share_buttons": true,
+        "show_vendor": false,
+        "descriptionPosition": "collapsibleDescription",
+        "show_color_swatch": false,
+        "show_color_carousel": false,
+        "show_size_swatch": true,
+        "show_quantity_selector": false,
+        "show_inventory_quantity": false,
+        "inventory_quantity_threshold": 3,
+        "show_price_in_button": false,
+        "show_payment_button": false,
+        "image_size": "small",
+        "stack_images": false,
+        "show_thumbnails": false,
+        "enable_image_zoom": true,
+        "reviews_enabled": false,
+        "featured_image_size": "normal"
+      }
+    },
+    "size-chart": {
+      "type": "size-chart",
+      "settings": {
+      }
+    },
+    "product-trustspot": {
+      "type": "product-trustspot",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "product-template",
+    "size-chart",
+    "product-trustspot"
+  ]
+}

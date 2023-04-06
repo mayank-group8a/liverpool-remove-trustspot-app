@@ -1,0 +1,11 @@
+{% layout none %}
+<script type="application/json" data-product-json>
+{
+  "product": {{- product | json -}}
+  {%- if product.metafields.product-bundles.inclusive_styles -%}
+  ,"inclusive_styles": {{- product.metafields.product-bundles.inclusive_styles | default: '' -}}
+  {%- else -%}
+  ,"inclusive_styles": null
+  {%- endif -%}
+}
+</script>

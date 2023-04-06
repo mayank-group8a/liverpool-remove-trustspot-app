@@ -1,0 +1,218 @@
+{%- assign is_entirely_fulfilled = false -%}
+{%- assign has_one_fulfillment = false -%}
+
+{%- if order.fulfillment_status == 'fulfilled' -%}
+  {%- assign is_entirely_fulfilled = true -%}
+  {%- assign tracking_numbers = '' -%}
+
+  {%- for line_item in order.line_items -%}
+    {%- assign tracking_numbers = tracking_numbers | append: line_item.fulfillment.tracking_number | append: ',' -%}
+  {%- endfor -%}
+
+  {%- assign tracking_numbers = tracking_numbers | split: ',' | compact | uniq -%}
+
+  {%- if tracking_numbers.size == 1 -%}
+    {%- assign has_one_fulfillment = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+<div class="Container Container--narrow">
+  <div class="PageHeader">
+    <a href="/account" class="PageHeader__Back Heading Text--subdued Link Link--primary u-h7">{% include 'icon' with 'select-arrow-left' %} {{ 'customer.account.back_to_account' | t }}</a>
+
+    <div class="SectionHeader">
+      {%- assign placed_at = order.created_at | date: format: 'month_day_year_time' -%}
+
+      <h1 class="SectionHeader__Heading Heading u-h1">{{ 'customer.order.title' | t: order_number: order.name }}</h1>
+      <p class="SectionHeader__Description">{{ 'customer.order.placed_at' | t: date: placed_at }}</p>
+
+      {%- if order.cancelled -%}
+        {%- assign cancelled_at = order.cancelled_at | date: format: 'month_day_year_time' -%}
+        <p class="Alert Alert--large Alert--error">{{ 'customer.order.cancelled_at' | t: date: cancelled_at }}</p>
+      {%- endif -%}
+
+      {%- if is_entirely_fulfilled and has_one_fulfillment -%}
+        {%- assign fulfillment = '' -%}
+
+        {%- for line_item in order.line_items -%}
+          {%- if line_item.fulfillment -%}
+            {%- assign fulfillment = line_item.fulfillment -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        <p class="Alert Alert--large Alert--success">{{ 'customer.order.fulfillment_html' | t: tracking_url: fulfillment.tracking_url, tracking_number: fulfillment.tracking_number }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="PageLayout PageLayout--breakLap">
+    <div class="PageLayout__Section">
+      <div class="TableWrapper">
+        <table class="AccountTable Table Table--noBorder" role="table">
+          <caption class="sr-only">Order {{ order.name }}</caption>
+          <thead class="Text--subdued"  role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader" id="ColumnProduct">{{ 'customer.order.product' | t }}</th>
+              <th scope="col" role="columnheader" id="ColumnQuantity" class="Text--alignCenter hidden-phone">{{ 'customer.order.quantity' | t }}</th>
+              <th scope="col" role="columnheader" id="ColumnTotal" class="Text--alignRight">{{ 'customer.order.line_price' | t }}</th>
+            </tr>
+          </thead>
+
+          <tbody  role="rowgroup">
+            {%- for line_item in order.line_items -%}
+              <tr role="row">
+                <td id="Row{{ line_item.key }}"
+                  headers="ColumnProduct"
+                  role="rowheader"
+                  scope="row"
+                  data-label="Product">
+                  <div class="CartItem__ImageWrapper AspectRatio">
+                    <div class="AspectRatio" style="--aspect-ratio: {{ line_item.image.aspect_ratio }}">
+                      <img class="CartItem__Image" src="{{ line_item.image | img_url: '240x' }}" alt="{{ line_item.image.alt | escape }}">
+                    </div>
+                  </div>
+
+                  <div class="CartItem__Info">
+                    <h2 class="CartItem__Title Heading">
+                      <a href="{{ line_item.url }}">{{ line_item.product.title }}</a>
+                    </h2>
+
+                    <div class="CartItem__Meta Heading Text--subdued">
+                      {%- unless line_item.product.has_only_default_variant -%}
+                        <p class="CartItem__Variant">{{ line_item.variant.title }}</p>
+                      {%- endunless -%}
+
+                      {%- if line_item.properties != empty -%}
+                        <ul class="CartItem__PropertyList">
+                          {%- for property in line_item.properties -%}
+                            {%- assign first_character_in_key = property.first | truncate: 1, '' -%}
+
+                            {%- if property.last == blank or first_character_in_key == '_' -%}
+                              {%- continue -%}
+                            {%- endif -%}
+
+                            <li class="CartItem__Property">{{ property.first }}: {{ property.last }}</li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+
+                      <div class="CartItem__PriceList">
+                        {%- if line_item.original_price > line_item.price -%}
+                          <span class="CartItem__Price Price Price--highlight">{{ line_item.price | money_without_trailing_zeros }}</span>
+                          <span class="CartItem__OriginalPrice Price Price--compareAt">{{ line_item.original_price | money_without_trailing_zeros }}</span>
+                        {%- else -%}
+                          <span class="CartItem__Price Price">{{ line_item.price | money_without_trailing_zeros }}</span>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div><!-- Bold:POv2 -->
+{% assign propertySize = line_item.properties | size %}
+{% if propertySize > 0 %}
+{% for p in line_item.properties %}
+{% assign first_character_in_key = p.first | truncate: 1, '' %}
+{% unless p.last == blank or first_character_in_key == '_' %}
+{{ p.first }}:
+{% if p.last contains '/uploads/' %}
+<a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+{% else %}
+{{ p.last }}
+{% endif %}
+{% endunless %}
+{% endfor %}
+{% endif %}
+<!-- Bold:POv2 -->
+
+                </td>
+
+                <td
+                  headers="Row{{ line_item.key }} ColumnQuantity""
+                  role="cell"
+                  data-label="ColumnQuantity" class="Text--alignCenter Heading Text--subdued hidden-phone">{{ line_item.quantity }}</td>
+
+                <td
+                  headers="Row{{ line_item.key }} ColumnPrice"
+                  role="cell"
+                  data-label="Price" class="Text--alignRight Heading Text--subdued">{{ line_item.line_price | money_without_trailing_zeros }}</td>
+              </tr>
+
+              {%- if line_item.fulfillment and has_one_fulfillment == false -%}
+                <tr role="row">
+                  <td colspan="3" id="RowSubtotal" role="rowheader" scope="row">
+                    <p class="Alert Alert--large Alert--success">{{ 'customer.order.line_fulfillment_html' | t: product_title: line_item.product.title, tracking_url: line_item.fulfillment.tracking_url, tracking_number: line_item.fulfillment.tracking_number }}</p>
+                  </td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+
+          <tfoot role="rowgroup">
+            {%- for discount in order.discounts -%}
+              <tr role="row">
+                <td class="hidden-phone"></td>
+                <td id="RowDiscount" role="rowheader" scope="row"><span class="Heading Text--subdued u-h7">{{ 'customer.order.discount' | t }}</span> <span class="Text--subdued">({{ discount.code }})</span></td>
+                <td headers="RowDiscount" role="cell" data-label="Discount" class="Heading Text--subdued Text--alignRight u-h7">{{ discount.savings | money_without_trailing_zeros }}</td>
+              </tr>
+            {%- endfor -%}
+
+            <tr role="row">
+              <td class="hidden-phone"></td>
+              <td id="RowSubtotal" role="rowheader" scope="row" class="Heading Text--subdued u-h7">{{ 'customer.order.subtotal' | t }}</td>
+              <td headers="RowSubtotal" role="cell" data-label="Subtotal" class="Heading Text--subdued Text--alignRight u-h7">{{ order.subtotal_price | money_without_trailing_zeros }}</td>
+            </tr>
+
+            {%- for shipping_method in order.shipping_methods -%}
+              <tr role="row">
+                <td class="hidden-phone"></td>
+                <td id="RowShipping" role="rowheader" scope="row"><span class="Heading Text--subdued u-h7">{{ 'customer.order.shipping' | t }}</span> <span class="Text--subdued">({{ shipping_method.title }})</span></td>
+                <td headers="RowShipping" role="cell" data-label="Shipping ({{ shipping_method.title }})" class="Heading Text--subdued Text--alignRight u-h7">{{ shipping_method.price | money_without_trailing_zeros }}</td>
+              </tr>
+            {%- endfor -%}
+
+            {%- for tax_line in order.tax_lines -%}
+              <tr role="row">
+                <td class="hidden-phone"></td>
+                <td id="RowTax" role="rowheader" scope="row" ><span class="Heading Text--subdued u-h7">{{ 'customer.order.tax' | t }}</span> <span class="Text--subdued">({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</span></td>
+                <td headers="RowTax" role="cell" data-label="({{ tax_line.title }} {{ tax_line.rate_percentage }}%)" class="Heading Text--subdued Text--alignRight u-h7">{{ tax_line.price | money_without_trailing_zeros }}</td>
+              </tr>
+            {%- endfor -%}
+
+            <tr role="row">
+              <td class="hidden-phone"></td>
+              <td id="RowTotal" role="rowheader" scope="row" class="Heading u-h6">{{ 'customer.order.total' | t }}</td>
+              <td headers="RowTotal" role="cell" data-label="Total" class="Heading Text--alignRight u-h6">{{ order.total_price | money_without_trailing_zeros }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="OrderAddresses PageLayout__Section PageLayout__Section--secondary">
+      <div class="Grid Grid--l">
+        <div class="Grid__Cell 1/2--tablet">
+          <div class="Segment">
+            <h2 class="Segment__Title Heading u-h7">{{ 'customer.order.shipping_address' | t }}</h2>
+
+            <div class="Segment__Content">
+              {%- if order.shipping_address -%}
+                {{ order.shipping_address | format_address | replace: '<p>', '<p class="AccountAddress"><span>' | replace_first: '<br>', '</span><br>' }}
+              {%- else -%}
+                <p>{{ 'customer.order.no_shipping_address' | t }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="Grid__Cell 1/2--tablet">
+          <div class="Segment">
+            <h2 class="Segment__Title Heading u-h7">{{ 'customer.order.billing_address' | t }}</h2>
+
+            <div class="Segment__Content">
+              {{ order.billing_address | format_address | replace: '<p>', '<p class="AccountAddress"><span>' | replace_first: '<br>', '</span><br>' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

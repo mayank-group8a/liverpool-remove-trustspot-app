@@ -1,0 +1,138 @@
+/* Helpers */
+.tn-hidden {
+  display: none !important;
+}
+
+/* Popup */
+.tn-popupmodal-title {
+  line-height: normal;
+}
+
+#tn-pdp-btn {
+  margin-top: -10px;
+}
+
+#tn-info-pdp {
+  font-family: Montserrat, sans-serif;
+  font-size: 11px;
+}
+
+.tn-info {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tn-info.tn-info-program-main-cart {
+  justify-content: flex-end;
+}
+
+.tn-info-logo {
+  height: 1rem;
+  width: 3rem;
+  margin: 1px 5px 2px 3px;
+}
+
+.tn-info-logo.tn-side-cart {
+  height: 1rem;
+  width: 3rem;
+  margin: -15px 0 0 0;
+}
+
+.tn-info-logo.tn-info-logo-checkout {
+  height: 1rem;
+  width: 3rem;
+  margin: 4px 5px 2px 0 !important;
+}
+
+.tn-final-sale {
+  margin: -15px 0 0;
+}
+
+.tn-info-text {
+  margin: 0px 3px 0 0;
+}
+
+.tn-info-program-text {
+  margin: 0px 3px 0 0;
+  font-size: 12px;
+
+}
+
+.tn-info-icon {
+  height: 13px;
+  width: 13px;
+  margin-top: -1px;
+}
+
+.tn-info-program-logo {
+  height: 16px;
+  width: 31px;
+  object-fit: cover;
+  object-position: left;
+  margin: 0 0 1px;
+  background-color: transparent;
+}
+
+.tn-widget {
+  width: 105%;
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 11px;
+}
+
+.tn-widget > strong > a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.tn-widget.tn-widget-main-cart {
+  font-size: 14px;
+}
+
+.tn-due-today {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tn-due-today.tn-due-today-main-cart {
+  justify-content: flex-end;
+}
+
+.tn-autorize-text {
+  width: 105%;
+}
+
+/* Media Queries */
+@media (max-width: 370px) {
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    .tn-info-program-logo {
+      height: 12px;
+      width: 23px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .tn-due-today.tn-due-today-main-cart {
+    justify-content: center;
+  }
+
+  .tn-info.tn-info-program-main-cart {
+    width: 100%;
+    justify-content: center;
+    padding-top: 15px;
+  }
+
+  .tn-widget.tn-widget-main-cart {
+    font-size: 12px;
+  }
+
+  .tn-autorize-text {
+    font-size: 0.6rem !important;
+  }
+}
+
+
